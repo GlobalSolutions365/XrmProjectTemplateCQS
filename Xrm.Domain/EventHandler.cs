@@ -1,20 +1,36 @@
-﻿using Xrm.Models.Interfaces;
+﻿using Microsoft.Xrm.Sdk;
+using System;
+using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain
 {
-    public class EventHandler<TEvent, TResult> : IHandleEvent<TEvent> where TEvent : IEvent
+    public class EventHandler<TEvent, TPostEvent> : IHandleEvent<TEvent> 
+        where TEvent : IEvent 
+        where TPostEvent : IEvent
     {
-        public void Handle(IEvent @event)
+        protected readonly IOrganizationService orgService;
+        private readonly IEventBus eventBus;
+
+        public EventHandler(IOrganizationService orgService, IEventBus eventBus)
         {
-            if (!Validate(@event)) { return; }
-            TResult result = Execute(@event);
-            Notify(@event, result);
+            this.orgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
+            this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
         }
 
-        protected virtual bool Validate(IEvent @event) { return true; }
+        public void Handle(TEvent @event)
+        {
+            if (!Validate(@event)) { return; }
 
-        protected virtual TResult Execute(IEvent command) { return default; }
+            TPostEvent postEvent = Execute(@event);
 
-        protected virtual void Notify(IEvent command, TResult result) { }
+            if (postEvent != null)
+            {
+                eventBus.NotifyListenersAbout(postEvent);
+            }
+        }
+
+        public virtual bool Validate(TEvent @event) { return true; }
+
+        public virtual TPostEvent Execute(TEvent @event) { return default; }
     }
 }

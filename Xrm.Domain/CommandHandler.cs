@@ -23,12 +23,12 @@ namespace Xrm.Domain
             
             if(@event != null)
             { 
-            eventBus.NotifyListenersAbout(@event);
+                eventBus.NotifyListenersAbout(@event);
             }
         }
 
-        protected virtual bool Validate(TCommand command) { return true; }
+        public virtual bool Validate(TCommand command) { return true; }
 
-        protected virtual TPostEvent Execute(TCommand command) { return default; }
+        public virtual TPostEvent Execute(TCommand command) { return default; }
     }
 }

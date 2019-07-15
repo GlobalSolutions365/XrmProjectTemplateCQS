@@ -56,9 +56,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="CommandHandlers\TestCommandHandler.cs" />
     <Compile Include="CommandHandlers\UpdateLastNameHandler.cs" />
+    <Compile Include="Commands\TestCommand.cs" />
     <Compile Include="Commands\UpdateLastName.cs" />
     <Compile Include="EventHandler.cs" />
+    <Compile Include="EventHandler\TestEventHandler2.cs" />
+    <Compile Include="EventHandler\TestEventHandler1.cs" />
+    <Compile Include="Events\TestEvent.cs" />
+    <Compile Include="Events\VoidEvent.cs" />
+    <Compile Include="Events\TestCommandExecuted.cs" />
     <Compile Include="Events\LastNameUpdated.cs" />
     <Compile Include="Locator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

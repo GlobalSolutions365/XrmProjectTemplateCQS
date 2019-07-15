@@ -1,4 +1,5 @@
-﻿using SimpleInjector;
+﻿using Microsoft.Xrm.Sdk;
+using SimpleInjector;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,12 +11,16 @@ namespace Xrm.Base
     {
         private readonly Container container = new Container();
 
-        public Bus()
+        public Bus(IOrganizationService orgService)
         {
-            Assembly domain = typeof(Xrm.Domain.Locator).Assembly;
+            Assembly domain = typeof(Domain.Locator).Assembly;
 
+            container.RegisterInstance(typeof(IEventBus), this);
+            container.RegisterInstance(orgService);
             container.Register(typeof(IHandleCommand<>), domain);
             container.Collection.Register(typeof(IHandleEvent<>), domain);
+
+            container.Verify();
         }
 
         public void Handle(ICommand command)
@@ -31,7 +36,7 @@ namespace Xrm.Base
             IEnumerable<dynamic> listeners = container.GetAllInstances(type);
             foreach(dynamic listener in listeners)
             {
-                listener.Handle(@event);
+                listener.Handle((dynamic)@event);
             }
         }
     }

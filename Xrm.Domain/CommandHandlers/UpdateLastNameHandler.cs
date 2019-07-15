@@ -12,12 +12,12 @@ namespace Xrm.Domain.CommandHandlers
         {
         }
 
-        protected override bool Validate(UpdateLastName command)
+        public override bool Validate(UpdateLastName command)
         {
             return !String.IsNullOrWhiteSpace(command.Prefix);
         }
 
-        protected override LastNameUpdated Execute(UpdateLastName command)
+        public override LastNameUpdated Execute(UpdateLastName command)
         {
             string newLastName = $"{command.Prefix}{DateTime.Now.ToString("yyyyMMMddHHmmss")}";
 
