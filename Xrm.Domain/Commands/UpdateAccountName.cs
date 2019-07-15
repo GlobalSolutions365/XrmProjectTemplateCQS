@@ -1,11 +1,12 @@
 ﻿using System;
+using Xrm.Models.Crm;
 using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain.Commands
 {
-    public class UpdateLastName : ICommand
+    public class UpdateAccountName : ICommand
     {
-        public Guid ContactId { get; set; }
+        public Account TargetAccount { get; set; }
         public string Prefix { get; set; }
     }
 }

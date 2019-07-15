@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XrmProjectTemplateCQS
+namespace Xrm.Plugin.Account
 {
-    public class Class1
+    public class AccountPostCreate
     {
+        
     }
 }

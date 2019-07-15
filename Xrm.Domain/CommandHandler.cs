@@ -19,16 +19,18 @@ namespace Xrm.Domain
         {
             if (!Validate(command)) { return; }
 
-            TPostEvent @event = Execute(command);
+            TPostEvent postEvent = Execute(command);
             
-            if(@event != null)
+            if(postEvent != null && postEvent.GetType() != typeof(Events.VoidEvent))
             { 
-                eventBus.NotifyListenersAbout(@event);
+                eventBus.NotifyListenersAbout(postEvent);
             }
         }
 
         public virtual bool Validate(TCommand command) { return true; }
 
         public virtual TPostEvent Execute(TCommand command) { return default; }
+
+        protected Events.VoidEvent VoidEvent => new Events.VoidEvent();
     }
 }
