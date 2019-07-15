@@ -20,7 +20,7 @@ namespace Xrm.Plugin.Account
                 TargetAccount = targetAccount,
                 Prefix = "Updated "
             };
-            localContext.CommandBus.Handle(updateAccountName);
+            CommandBus.Handle(updateAccountName);
         }
     }
 }

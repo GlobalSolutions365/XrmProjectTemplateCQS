@@ -62,13 +62,6 @@ namespace Xrm.Plugin
             }
 
             #region XrmProjectTemplate
-            internal ICommandBus CommandBus
-            {
-                get;
-
-                private set;
-            }
-
             public Entity GetTarget()
             {
                 return (Entity)this.PluginExecutionContext.InputParameters["Target"];
@@ -108,8 +101,6 @@ namespace Xrm.Plugin
 
                 // Delegate A/S added: Use the factory to generate the Organization Admin Service.
                 this.OrganizationAdminService = factory.CreateOrganizationService(null);
-
-                this.CommandBus = new Bus(this.OrganizationAdminService);
             }
 
             internal void Trace(string message)
@@ -132,6 +123,13 @@ namespace Xrm.Plugin
                         this.PluginExecutionContext.InitiatingUserId);
                 }
             }
+        }
+
+        internal ICommandBus CommandBus
+        {
+            get;
+
+            private set;
         }
 
         private Collection<Tuple<int, string, string, Action<LocalPluginContext>>> registeredEvents;
@@ -195,6 +193,14 @@ namespace Xrm.Plugin
 
             // Construct the Local plug-in context.
             LocalPluginContext localcontext = new LocalPluginContext(serviceProvider);
+
+            #region XrmProjectTemplateQOS
+            //TODO: Refactor this
+            if(CommandBus == null)
+            { 
+                CommandBus = new Bus(localcontext.OrganizationAdminService);
+            }
+            #endregion
 
             localcontext.Trace(string.Format(CultureInfo.InvariantCulture, "Entered {0}.Execute()", this.ChildClassName));
 
