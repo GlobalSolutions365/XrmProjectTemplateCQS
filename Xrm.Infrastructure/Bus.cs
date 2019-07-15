@@ -28,8 +28,10 @@ namespace Xrm.Base
         {
             using(ILifetimeScope scope = container.BeginLifetimeScope())
             { 
-                var type = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
-                dynamic handler = scope.Resolve(type);
+                var handlerType = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
+
+                dynamic handler = scope.Resolve(handlerType);
+
                 handler.Execute((dynamic)command);
             }
         }
@@ -37,16 +39,16 @@ namespace Xrm.Base
         public void NotifyListenersAbout(IEvent @event)
         {
             using (ILifetimeScope scope = container.BeginLifetimeScope())
-            {
-                //var type = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
-                //IEnumerable<dynamic> listeners = (IEnumerable<dynamic>) scope.Resolve(type);
-                //foreach (dynamic listener in listeners)
-                //{
-                //    listener.Handle((dynamic)@event);
-                //}
+            {             
+                var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
+                var enumerableOfHandlersType = typeof(IEnumerable<>).MakeGenericType(handlerType);
 
-                //var type = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
-                //object listeners = scope.Resolve(IEnumerable<type>);
+                dynamic listeners = scope.Resolve(enumerableOfHandlersType);
+
+                foreach (dynamic listener in listeners)
+                {
+                    listener.Handle((dynamic)@event);
+                }
             }
         }
     }
