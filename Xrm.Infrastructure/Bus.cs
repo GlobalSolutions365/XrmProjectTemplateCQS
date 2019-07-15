@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk;
-using SimpleInjector;
-using System;
+using Autofac;
 using System.Collections.Generic;
 using System.Reflection;
 using Xrm.Models.Interfaces;
@@ -9,34 +8,45 @@ namespace Xrm.Base
 {
     public class Bus : ICommandBus, IEventBus
     {
-        private readonly Container container = new Container();
+        private readonly IContainer container = null;
 
         public Bus(IOrganizationService orgService)
         {
+            var builder = new ContainerBuilder();
+
             Assembly domain = typeof(Domain.Locator).Assembly;
 
-            container.RegisterInstance(typeof(IEventBus), this);
-            container.RegisterInstance(orgService);
-            container.Register(typeof(IHandleCommand<>), domain);
-            container.Collection.Register(typeof(IHandleEvent<>), domain);
+            builder.RegisterInstance<IEventBus>(this);
+            builder.RegisterInstance<IOrganizationService>(orgService);
+            builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleCommand<>));
+            builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
 
-            container.Verify();
+            container = builder.Build();
         }
 
         public void Handle(ICommand command)
         {
-            var type = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
-            dynamic handler = container.GetInstance(type);
-            handler.Execute((dynamic)command);
+            using(ILifetimeScope scope = container.BeginLifetimeScope())
+            { 
+                var type = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
+                dynamic handler = scope.Resolve(type);
+                handler.Execute((dynamic)command);
+            }
         }
 
         public void NotifyListenersAbout(IEvent @event)
         {
-            var type = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
-            IEnumerable<dynamic> listeners = container.GetAllInstances(type);
-            foreach(dynamic listener in listeners)
+            using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
-                listener.Handle((dynamic)@event);
+                //var type = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
+                //IEnumerable<dynamic> listeners = (IEnumerable<dynamic>) scope.Resolve(type);
+                //foreach (dynamic listener in listeners)
+                //{
+                //    listener.Handle((dynamic)@event);
+                //}
+
+                //var type = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
+                //object listeners = scope.Resolve(IEnumerable<type>);
             }
         }
     }
