@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xrm.Base;
 using Xrm.Domain.Commands;
 using Xrm.Domain.Events;
+using Xrm.Models.Crm;
 using Xrm.Models.Interfaces;
 
 namespace Xrm.UnitTests.Resolver
@@ -15,7 +16,7 @@ namespace Xrm.UnitTests.Resolver
         {
             var context = new XrmFakedContext();
 
-            ICommandBus cmdBus = new Bus(context.GetOrganizationService());
+            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()));
 
             TestCommand cmd = new TestCommand { IsHandled = false };
 
@@ -29,7 +30,7 @@ namespace Xrm.UnitTests.Resolver
         {
             var context = new XrmFakedContext();
 
-            IEventBus cmdBus = new Bus(context.GetOrganizationService());
+            IEventBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()));
 
             TestEvent @event = new TestEvent();
 

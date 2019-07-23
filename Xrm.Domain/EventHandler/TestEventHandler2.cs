@@ -6,7 +6,7 @@ namespace Xrm.Domain.EventHandler
 {
     public class TestEventHandler2 : EventHandler<TestEvent, VoidEvent>
     {
-        public TestEventHandler2(IOrganizationService orgService, IEventBus eventBus) : base(orgService, eventBus)
+        public TestEventHandler2(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
         {
         }
 

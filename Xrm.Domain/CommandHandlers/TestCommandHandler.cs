@@ -7,7 +7,7 @@ namespace Xrm.Domain.CommandHandlers
 {
     public class TestCommandHandler : CommandHandler<TestCommand, TestCommandExecuted>
     {
-        public TestCommandHandler(IOrganizationService orgService, IEventBus eventBus) : base(orgService, eventBus)
+        public TestCommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
         {
         }
 

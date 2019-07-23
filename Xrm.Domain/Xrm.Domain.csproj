@@ -88,5 +88,8 @@
     <None Include="packages.config" />
     <None Include="Xrm.Domain.snk" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Queries\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -77,7 +77,11 @@
   <ItemGroup>
     <Compile Include="Account\AccountPostCreate.cs" />
     <Compile Include="Account\AccountPreCreate.cs" />
-    <Compile Include="Plugin.cs" />
+    <Compile Include="Base\Enums.cs" />
+    <Compile Include="Base\IPluginStepConfig.cs" />
+    <Compile Include="Base\LocalPluginContext.cs" />
+    <Compile Include="Base\Plugin.cs" />
+    <Compile Include="Base\PluginStepConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

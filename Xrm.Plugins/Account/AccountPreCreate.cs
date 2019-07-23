@@ -1,10 +1,11 @@
 ﻿using System;
 using Xrm.Domain.Commands;
 using Ctx = Xrm.Models.Crm;
+using Xrm.Plugin.Base;
 
 namespace Xrm.Plugin.Account
 {
-    public class AccountPreCreate : Plugin
+    public class AccountPreCreate : BasePlugin
     {
         public AccountPreCreate() : base(typeof(AccountPreCreate))
         {

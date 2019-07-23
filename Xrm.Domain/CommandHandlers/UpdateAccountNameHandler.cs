@@ -8,7 +8,7 @@ namespace Xrm.Domain.CommandHandlers
 {
     public class UpdateAccountNameHandler : CommandHandler<UpdateAccountName, VoidEvent>
     {
-        public UpdateAccountNameHandler(IOrganizationService orgService, IEventBus eventBus) : base(orgService, eventBus)
+        public UpdateAccountNameHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
         {
         }
 

@@ -10,14 +10,14 @@ namespace Xrm.Base
     {
         private readonly IContainer container = null;
 
-        public Bus(IOrganizationService orgService)
+        public Bus(IOrganizationServiceWrapper orgServiceWrapper)
         {
             var builder = new ContainerBuilder();
 
             Assembly domain = typeof(Domain.Locator).Assembly;
 
             builder.RegisterInstance<IEventBus>(this);
-            builder.RegisterInstance<IOrganizationService>(orgService);
+            builder.RegisterInstance<IOrganizationServiceWrapper>(orgServiceWrapper);
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleCommand<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
 

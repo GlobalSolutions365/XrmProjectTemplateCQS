@@ -6,12 +6,12 @@ namespace Xrm.Domain
 {
     public abstract class CommandHandler<TCommand, TPostEvent> : IHandleCommand<TCommand> where TCommand : ICommand where TPostEvent : IEvent
     {
-        protected readonly IOrganizationService orgService;
+        protected readonly IOrganizationServiceWrapper orgServiceWrapper;
         private readonly IEventBus eventBus;
 
-        public CommandHandler(IOrganizationService orgService, IEventBus eventBus)
+        public CommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus)
         {
-            this.orgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
+            this.orgServiceWrapper = orgServiceWrapper ?? throw new ArgumentNullException(nameof(orgServiceWrapper));
             this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
         }
 

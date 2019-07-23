@@ -8,12 +8,12 @@ namespace Xrm.Domain
         where TEvent : IEvent 
         where TPostEvent : IEvent
     {
-        protected readonly IOrganizationService orgService;
+        protected readonly IOrganizationServiceWrapper orgServiceWrapper;
         private readonly IEventBus eventBus;
 
-        public EventHandler(IOrganizationService orgService, IEventBus eventBus)
+        public EventHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus)
         {
-            this.orgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
+            this.orgServiceWrapper = orgServiceWrapper ?? throw new ArgumentNullException(nameof(orgServiceWrapper));
             this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
         }
 

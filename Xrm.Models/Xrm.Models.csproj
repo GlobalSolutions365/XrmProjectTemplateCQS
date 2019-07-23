@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crm\OrganizationServiceWrapper.cs" />
     <Compile Include="Crm\XrmContext.cs" />
     <Compile Include="Crm\XrmExtensions.cs" />
     <Compile Include="Interfaces\ICommand.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Interfaces\IEventBus.cs" />
     <Compile Include="Interfaces\IHandleCommand.cs" />
     <Compile Include="Interfaces\IHandleEvent.cs" />
+    <Compile Include="Interfaces\IOrganizationServiceWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
