@@ -69,6 +69,7 @@
     <Compile Include="CommandHandlers\UpdateAccountNameHandler.cs" />
     <Compile Include="Commands\TestCommand.cs" />
     <Compile Include="Commands\UpdateAccountName.cs" />
+    <Compile Include="CrmQuery.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="EventHandler\TestEventHandler2.cs" />
     <Compile Include="EventHandler\TestEventHandler1.cs" />
