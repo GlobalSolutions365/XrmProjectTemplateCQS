@@ -65,10 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="CommandHandlers\SetNrOfContactsCommandHandler.cs" />
     <Compile Include="CommandHandlers\TestCommandHandler.cs" />
-    <Compile Include="CommandHandlers\UpdateAccountNameHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateAccountNameCommandHandler.cs" />
+    <Compile Include="Commands\SetNrOfContactsCommand.cs" />
     <Compile Include="Commands\TestCommand.cs" />
-    <Compile Include="Commands\UpdateAccountName.cs" />
+    <Compile Include="Commands\UpdateAccountNameCommand.cs" />
     <Compile Include="CrmQuery.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="EventHandler\TestEventHandler2.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Events\TestCommandExecuted.cs" />
     <Compile Include="Locator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\AccountQueries.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xrm.Models\Xrm.Models.csproj">
@@ -89,8 +92,6 @@
     <None Include="packages.config" />
     <None Include="Xrm.Domain.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

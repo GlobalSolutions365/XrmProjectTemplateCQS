@@ -16,7 +16,7 @@ namespace Xrm.Plugin.Account
         {
             Ctx.Account targetAccount = localContext.GetTarget<Ctx.Account>();
 
-            var updateAccountName = new UpdateAccountName
+            var updateAccountName = new UpdateAccountNameCommand
             {
                 TargetAccount = targetAccount,
                 Prefix = "Updated "

@@ -1,23 +1,22 @@
-﻿using Microsoft.Xrm.Sdk;
-using System;
+﻿using System;
 using Xrm.Domain.Commands;
 using Xrm.Domain.Events;
 using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain.CommandHandlers
 {
-    public class UpdateAccountNameHandler : CommandHandler<UpdateAccountName, VoidEvent>
+    public class UpdateAccountNameCommandHandler : CommandHandler<UpdateAccountNameCommand, VoidEvent>
     {
-        public UpdateAccountNameHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+        public UpdateAccountNameCommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
         {
         }
 
-        public override bool Validate(UpdateAccountName command)
+        public override bool Validate(UpdateAccountNameCommand command)
         {
             return !String.IsNullOrWhiteSpace(command.Prefix);
         }
 
-        public override VoidEvent Execute(UpdateAccountName command)
+        public override VoidEvent Execute(UpdateAccountNameCommand command)
         {
             string newName = $"{command.Prefix}{command.TargetAccount.Name}";
 

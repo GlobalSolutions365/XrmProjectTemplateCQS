@@ -3,6 +3,11 @@ using Autofac;
 using System.Collections.Generic;
 using System.Reflection;
 using Xrm.Models.Interfaces;
+using Xrm.Domain;
+using Autofac.Core;
+using System.Linq;
+using Xrm.Models.Attrbutes;
+using Xrm.Domain.Queries;
 
 namespace Xrm.Base
 {
@@ -14,12 +19,13 @@ namespace Xrm.Base
         {
             var builder = new ContainerBuilder();
 
-            Assembly domain = typeof(Domain.Locator).Assembly;
+            Assembly domain = typeof(Locator).Assembly;
 
             builder.RegisterInstance<IEventBus>(this);
-            builder.RegisterInstance<IOrganizationServiceWrapper>(orgServiceWrapper);
+            builder.RegisterInstance(orgServiceWrapper);            
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleCommand<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
+            builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(CrmQuery<>));
 
             container = builder.Build();
         }
@@ -30,7 +36,31 @@ namespace Xrm.Base
             { 
                 var handlerType = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
 
-                dynamic handler = scope.Resolve(handlerType);
+                dynamic handler = scope.Resolve(handlerType, new ResolvedParameter(
+                    (pi, ctx) => {
+                        // Determine if we're looking for a parameter that is of a type that extends CrmQuery<>
+                        bool isCrmQuery = pi.ParameterType.IsClass
+                                          && pi.ParameterType.BaseType.IsGenericType
+                                          && pi.ParameterType.BaseType.GetGenericTypeDefinition() == typeof(CrmQuery<>);
+
+                        return isCrmQuery;
+                    },
+                    (pi, ctx) => {
+                        // Check if it has the [InUserContext] attribute
+                        bool useUserContextService = pi.CustomAttributes.Any(attr => attr.AttributeType == typeof(InUserContextAttribute));
+
+                        // This contains both the system context and user context CRM service connections
+                        IOrganizationServiceWrapper orgServiceWrapper = scope.Resolve<IOrganizationServiceWrapper>();
+
+                        // Inject the correct CRM service reference
+                        object resolvedQueryHandler = scope.Resolve(pi.ParameterType, new ResolvedParameter(
+                            (_pi, _ctx) => _pi.ParameterType == typeof(IOrganizationService),
+                            (_pi, _ctx) => useUserContextService ? orgServiceWrapper.OrgService : orgServiceWrapper.OrgServiceAsSystem
+                        ));
+
+                        return resolvedQueryHandler;
+                    }
+                ));
 
                 handler.Execute((dynamic)command);
             }

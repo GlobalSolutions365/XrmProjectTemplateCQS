@@ -6,20 +6,20 @@ using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain
 {
-    public abstract class CrmQuery<TEntity> : IQuery<TEntity> where TEntity : Entity
+    public abstract class CrmQuery<TEntity> : IQuery where TEntity : Entity
     {
-        private readonly IOrganizationService orgService;
-        private readonly string entityName;
+        protected IOrganizationService OrgService { get; }
+        protected string EntityName { get; }
 
         public CrmQuery(IOrganizationService orgService)
         {
-            this.orgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
-            entityName = typeof(TEntity).Name.ToLowerInvariant();
+            this.OrgService = orgService ?? throw new ArgumentNullException(nameof(orgService));
+            this.EntityName = typeof(TEntity).Name.ToLowerInvariant();
         }
 
         public TEntity Retrieve(Guid id, ColumnSet columns)
         {
-            return orgService.Retrieve(entityName, id, columns).ToEntity<TEntity>();
+            return OrgService.Retrieve(EntityName, id, columns).ToEntity<TEntity>();
         }
 
         public TEntity[] RetrieveMultiple(QueryExpression query)
@@ -49,7 +49,7 @@ namespace Xrm.Domain
 
             while (true)
             {
-                EntityCollection ecoll = orgService.RetrieveMultiple(query);
+                EntityCollection ecoll = OrgService.RetrieveMultiple(query);
 
                 foreach (Entity entity in ecoll.Entities)
                 {

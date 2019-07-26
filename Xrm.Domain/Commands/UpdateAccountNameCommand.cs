@@ -4,7 +4,7 @@ using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain.Commands
 {
-    public class UpdateAccountName : ICommand
+    public class UpdateAccountNameCommand : ICommand
     {
         public Account TargetAccount { get; set; }
         public string Prefix { get; set; }

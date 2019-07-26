@@ -1,5 +1,6 @@
 ﻿using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using Xrm.Base;
 using Xrm.Domain.Commands;
 using Xrm.Domain.Events;
@@ -23,6 +24,18 @@ namespace Xrm.UnitTests.Resolver
             cmdBus.Handle(cmd);
 
             Assert.IsTrue(cmd.IsHandled);
+        }
+
+        [TestMethod]
+        public void CanResolveCommandHandlerWithUserContextRepo()
+        {
+            var context = new XrmFakedContext();
+
+            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService(), context.GetOrganizationService()));
+
+            SetNrOfContactsCommand cmd = new SetNrOfContactsCommand { AccountId = Guid.NewGuid() };
+
+            cmdBus.Handle(cmd);
         }
 
         [TestMethod]
