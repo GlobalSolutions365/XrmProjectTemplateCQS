@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
-using System.Linq.Expressions;
-using Microsoft.Xrm.Sdk;
-
+using Xrm.Base;
+using Xrm.Models.Interfaces;
+using ExtendedStepConfig = System.Tuple<int, int, string, int, string, string>;
+using ImageTuple = System.Tuple<string, string, int, string>;
 // StepConfig           : className, ExecutionStage, EventOperation, LogicalName
 // ExtendedStepConfig   : Deployment, ExecutionMode, Name, ExecutionOrder, FilteredAttributes, UserContext
 // ImageTuple           : Name, EntityAlias, ImageType, Attributes
 using StepConfig = System.Tuple<string, int, string, string>;
-using ExtendedStepConfig = System.Tuple<int, int, string, int, string, string>;
-using ImageTuple = System.Tuple<string, string, int, string>;
-using Xrm.Models.Interfaces;
-using Xrm.Base;
 
 namespace Xrm.Plugin.Base
 {
@@ -84,8 +82,8 @@ namespace Xrm.Plugin.Base
 
             #region XrmProjectTemplateQOS
             //TODO: Refactor this
-            if(CommandBus == null)
-            { 
+            if (CommandBus == null)
+            {
                 CommandBus = new Bus(localcontext.OrgServiceWrapper);
             }
             #endregion
@@ -229,7 +227,7 @@ namespace Xrm.Plugin.Base
             where T : Entity
         {
             PluginStepConfig<T> stepConfig = new PluginStepConfig<T>(eventOperation, executionStage);
-            this.PluginStepConfigs.Add((IPluginStepConfig)stepConfig);
+            this.PluginStepConfigs.Add(stepConfig);
 
             this.RegisteredEvents.Add(
                 new Tuple<int, string, string, Action<LocalPluginContext>>(
@@ -263,11 +261,4 @@ namespace Xrm.Plugin.Base
     {
         public AnyEntity() : base("") { }
     }
-
-    /**
-     * Enums to help setup plugin steps
-     */
-
-    
-    
 }

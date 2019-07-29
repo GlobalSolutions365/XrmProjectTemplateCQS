@@ -33,7 +33,7 @@ namespace Xrm.UnitTests.Resolver
 
             ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService(), context.GetOrganizationService()));
 
-            SetNrOfContactsCommand cmd = new SetNrOfContactsCommand { AccountId = Guid.NewGuid() };
+            SetAccountNrOfContactsCommand cmd = new SetAccountNrOfContactsCommand { FromContact = new Contact() };
 
             cmdBus.Handle(cmd);
         }

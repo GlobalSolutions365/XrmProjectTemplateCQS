@@ -65,10 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
-    <Compile Include="CommandHandlers\SetNrOfContactsCommandHandler.cs" />
+    <Compile Include="CommandHandlers\SetAccountNrOfContactsCommandHandler.cs" />
     <Compile Include="CommandHandlers\TestCommandHandler.cs" />
     <Compile Include="CommandHandlers\UpdateAccountNameCommandHandler.cs" />
-    <Compile Include="Commands\SetNrOfContactsCommand.cs" />
+    <Compile Include="Commands\SetAccountNrOfContactsCommand.cs" />
     <Compile Include="Commands\TestCommand.cs" />
     <Compile Include="Commands\UpdateAccountNameCommand.cs" />
     <Compile Include="CrmQuery.cs" />

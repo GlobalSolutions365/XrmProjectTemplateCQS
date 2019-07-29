@@ -1,7 +1,6 @@
-﻿using System;
-using Xrm.Domain.Commands;
-using Ctx = Xrm.Models.Crm;
+﻿using Xrm.Domain.Commands;
 using Xrm.Plugin.Base;
+using Ctx = Xrm.Models.Crm;
 
 namespace Xrm.Plugin.Account
 {

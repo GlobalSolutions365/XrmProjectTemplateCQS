@@ -30,5 +30,17 @@ namespace Xrm.Domain.Queries
                           .FirstOrDefault();
             }
         }
+
+        public int GetNrOfContacts(Guid accountId)
+        {
+            using (XrmContext xrm = new XrmContext(OrgService))
+            {
+                return xrm.ContactSet
+                          .Where(c => c.ParentCustomerId != null && c.ParentCustomerId.Id == accountId)
+                          .Select(c => c.Id)
+                          .ToArray()
+                          .Length;
+            }
+        }
     }
 }
