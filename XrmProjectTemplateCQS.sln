@@ -13,7 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xrm.Infrastructure", "Xrm.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xrm.UnitTests", "Xrm.UnitTests\Xrm.UnitTests.csproj", "{CB99F275-89E5-481D-87B9-A08141FECC9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Scripts\Scripts.csproj", "{23AAC55B-5634-49C3-82B6-3079E6F686A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Tools\Scripts\Scripts.csproj", "{23AAC55B-5634-49C3-82B6-3079E6F686A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{E26010C3-AB27-4D91-A939-2120969C39E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{23AAC55B-5634-49C3-82B6-3079E6F686A3} = {E26010C3-AB27-4D91-A939-2120969C39E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FDE34FC2-64F2-4A3D-90A1-626F51B9C886}
