@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Tools\Scripts\Sc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{E26010C3-AB27-4D91-A939-2120969C39E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowVisualizer", "Tools\FlowVisualizer\FlowVisualizer.csproj", "{0272C836-FE6C-4249-933C-3B9775E8B998}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,12 +49,17 @@ Global
 		{23AAC55B-5634-49C3-82B6-3079E6F686A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23AAC55B-5634-49C3-82B6-3079E6F686A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23AAC55B-5634-49C3-82B6-3079E6F686A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0272C836-FE6C-4249-933C-3B9775E8B998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0272C836-FE6C-4249-933C-3B9775E8B998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0272C836-FE6C-4249-933C-3B9775E8B998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0272C836-FE6C-4249-933C-3B9775E8B998}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{23AAC55B-5634-49C3-82B6-3079E6F686A3} = {E26010C3-AB27-4D91-A939-2120969C39E5}
+		{0272C836-FE6C-4249-933C-3B9775E8B998} = {E26010C3-AB27-4D91-A939-2120969C39E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FDE34FC2-64F2-4A3D-90A1-626F51B9C886}
