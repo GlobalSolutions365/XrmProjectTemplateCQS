@@ -4,7 +4,7 @@ using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain
 {
-    public class EventHandler<TEvent, TPostEvent> : IHandleEvent<TEvent> 
+    public abstract class EventHandler<TEvent, TPostEvent> : IHandleEvent<TEvent> 
         where TEvent : IEvent 
         where TPostEvent : IEvent
     {
@@ -31,6 +31,8 @@ namespace Xrm.Domain
 
         public virtual bool Validate(TEvent @event) { return true; }
 
-        public virtual TPostEvent Execute(TEvent @event) { return default; }
+        public abstract TPostEvent Execute(TEvent @event);
+
+        protected Events.VoidEvent VoidEvent => new Events.VoidEvent();
     }
 }

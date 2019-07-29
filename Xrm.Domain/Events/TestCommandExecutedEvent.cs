@@ -2,7 +2,7 @@
 
 namespace Xrm.Domain.Events
 {
-    public class TestCommandExecuted : IEvent
+    public class TestCommandExecutedEvent : IEvent
     {
     }
 }

@@ -29,7 +29,7 @@ namespace Xrm.Domain
 
         public virtual bool Validate(TCommand command) { return true; }
 
-        public virtual TPostEvent Execute(TCommand command) { return default; }
+        public abstract TPostEvent Execute(TCommand command);
 
         protected Events.VoidEvent VoidEvent => new Events.VoidEvent();
     }

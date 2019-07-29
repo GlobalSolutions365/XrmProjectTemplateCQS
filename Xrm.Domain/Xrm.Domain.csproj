@@ -73,11 +73,16 @@
     <Compile Include="Commands\UpdateAccountNameCommand.cs" />
     <Compile Include="CrmQuery.cs" />
     <Compile Include="EventHandler.cs" />
+    <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler2.cs" />
+    <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler1.cs" />
     <Compile Include="EventHandler\TestEventHandler2.cs" />
     <Compile Include="EventHandler\TestEventHandler1.cs" />
+    <Compile Include="Events\AccountNrOfContactsSetEvent.cs" />
+    <Compile Include="Events\LastNameChangedEvent.cs" />
+    <Compile Include="EventHandler\LastNameChangedEventHandler.cs" />
     <Compile Include="Events\TestEvent.cs" />
     <Compile Include="Events\VoidEvent.cs" />
-    <Compile Include="Events\TestCommandExecuted.cs" />
+    <Compile Include="Events\TestCommandExecutedEvent.cs" />
     <Compile Include="Locator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AccountQueries.cs" />

@@ -8,7 +8,7 @@ using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain.CommandHandlers
 {
-    public class SetAccountNrOfContactsCommandHandler : CommandHandler<SetAccountNrOfContactsCommand, VoidEvent>
+    public class SetAccountNrOfContactsCommandHandler : CommandHandler<SetAccountNrOfContactsCommand, AccountNrOfContactsSetEvent>
     {
         private readonly AccountQueries accountQueriesAsUser;
 
@@ -19,11 +19,11 @@ namespace Xrm.Domain.CommandHandlers
             this.accountQueriesAsUser = accountQueriesAsUser ?? throw new ArgumentNullException(nameof(accountQueriesAsUser));
         }
 
-        public override VoidEvent Execute(SetAccountNrOfContactsCommand command)
+        public override AccountNrOfContactsSetEvent Execute(SetAccountNrOfContactsCommand command)
         {
             if(command?.FromContact?.ParentCustomerId == null)
             {
-                return VoidEvent;
+                return null;
             }
 
             int nrOfContacts = accountQueriesAsUser.GetNrOfContacts(command.FromContact.ParentCustomerId.Id);
@@ -35,7 +35,7 @@ namespace Xrm.Domain.CommandHandlers
             };
             orgServiceWrapper.OrgServiceAsSystem.Update(account);
 
-            return VoidEvent;
+            return new AccountNrOfContactsSetEvent { TargetContact = command.FromContact };
         }
     }
 }

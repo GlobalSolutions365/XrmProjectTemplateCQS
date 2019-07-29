@@ -22,7 +22,7 @@ namespace Xrm.Base
             Assembly domain = typeof(Locator).Assembly;
 
             builder.RegisterInstance<IEventBus>(this);
-            builder.RegisterInstance(orgServiceWrapper);            
+            builder.RegisterInstance(orgServiceWrapper);
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleCommand<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(CrmQuery<>));
@@ -32,12 +32,37 @@ namespace Xrm.Base
 
         public void Handle(ICommand command)
         {
-            using(ILifetimeScope scope = container.BeginLifetimeScope())
-            { 
+            using (ILifetimeScope scope = container.BeginLifetimeScope())
+            {
                 var handlerType = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
 
-                dynamic handler = scope.Resolve(handlerType, new ResolvedParameter(
-                    (pi, ctx) => {
+                dynamic handler = scope.Resolve(handlerType, ContextBasedQueryOrgServiceResolver(scope));
+
+                handler.Handle((dynamic)command);
+            }
+        }
+
+        public void NotifyListenersAbout(IEvent @event)
+        {
+            using (ILifetimeScope scope = container.BeginLifetimeScope())
+            {
+                var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
+                var enumerableOfHandlersType = typeof(IEnumerable<>).MakeGenericType(handlerType);
+
+                dynamic listeners = scope.Resolve(enumerableOfHandlersType, ContextBasedQueryOrgServiceResolver(scope));
+
+                foreach (dynamic listener in listeners)
+                {
+                    listener.Handle((dynamic)@event);
+                }
+            }
+        }
+
+        private ResolvedParameter ContextBasedQueryOrgServiceResolver(ILifetimeScope scope)
+        {
+            return new ResolvedParameter(
+                    (pi, ctx) =>
+                    {
                         // Determine if we're looking for a parameter that is of a type that extends CrmQuery<>
                         bool isCrmQuery = pi.ParameterType.IsClass
                                           && pi.ParameterType.BaseType.IsGenericType
@@ -45,7 +70,8 @@ namespace Xrm.Base
 
                         return isCrmQuery;
                     },
-                    (pi, ctx) => {
+                    (pi, ctx) =>
+                    {
                         // Check if it has the [InUserContext] attribute
                         bool useUserContextService = pi.CustomAttributes.Any(attr => attr.AttributeType == typeof(InUserContextAttribute));
 
@@ -60,26 +86,8 @@ namespace Xrm.Base
 
                         return resolvedQueryHandler;
                     }
-                ));
-
-                handler.Execute((dynamic)command);
-            }
-        }
-
-        public void NotifyListenersAbout(IEvent @event)
-        {
-            using (ILifetimeScope scope = container.BeginLifetimeScope())
-            {             
-                var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
-                var enumerableOfHandlersType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-
-                dynamic listeners = scope.Resolve(enumerableOfHandlersType);
-
-                foreach (dynamic listener in listeners)
-                {
-                    listener.Handle((dynamic)@event);
-                }
-            }
+                );
         }
     }
+
 }

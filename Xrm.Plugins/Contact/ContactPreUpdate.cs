@@ -4,11 +4,11 @@ using Ctx = Xrm.Models.Crm;
 
 namespace Xrm.Plugin.Contact
 {
-    public class ContactPostCreate : Base.Plugin
+    public class ContactPreUpdate : Base.Plugin
     {
-        public ContactPostCreate() : base(typeof(ContactPostCreate))
+        public ContactPreUpdate() : base(typeof(ContactPreUpdate))
         {
-            RegisterPluginStep<Ctx.Contact>(EventOperation.Create, ExecutionStage.PostOperation, Execute);
+            RegisterPluginStep<Ctx.Contact>(EventOperation.Update, ExecutionStage.PreOperation, Execute);
         }
 
         private void Execute(LocalPluginContext localContext)
