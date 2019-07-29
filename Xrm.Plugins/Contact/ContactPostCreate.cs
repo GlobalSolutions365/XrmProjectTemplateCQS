@@ -4,7 +4,7 @@ using Ctx = Xrm.Models.Crm;
 
 namespace Xrm.Plugin.Contact
 {
-    public class ContactPostCreate : BasePlugin
+    public class ContactPostCreate : Base.Plugin
     {
         public ContactPostCreate() : base(typeof(ContactPostCreate))
         {

@@ -4,7 +4,7 @@ using Ctx = Xrm.Models.Crm;
 
 namespace Xrm.Plugin.Account
 {
-    public class AccountPreCreate : BasePlugin
+    public class AccountPreCreate : Base.Plugin
     {
         public AccountPreCreate() : base(typeof(AccountPreCreate))
         {

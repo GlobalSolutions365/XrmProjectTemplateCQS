@@ -19,7 +19,7 @@ namespace Xrm.Plugin.Base
     /// <summary>
     /// Base class for all Plugins.
     /// </summary>    
-    public abstract class BasePlugin : IPlugin
+    public abstract class Plugin : IPlugin
     {
         internal ICommandBus CommandBus { get; private set; }
 
@@ -50,10 +50,10 @@ namespace Xrm.Plugin.Base
         protected string ChildClassName { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasePlugin"/> class.
+        /// Initializes a new instance of the <see cref="Plugin"/> class.
         /// </summary>
         /// <param name="childClassName">The <see cref="" cred="Type"/> of the derived class.</param>
-        internal BasePlugin(Type childClassName)
+        internal Plugin(Type childClassName)
         {
             this.ChildClassName = childClassName.ToString();
         }
