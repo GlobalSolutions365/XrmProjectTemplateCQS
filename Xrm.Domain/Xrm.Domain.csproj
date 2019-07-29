@@ -75,6 +75,7 @@
     <Compile Include="EventHandler.cs" />
     <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler2.cs" />
     <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler1.cs" />
+    <Compile Include="EventHandler\TestCommandExecutedEventHandler.cs" />
     <Compile Include="EventHandler\TestEventHandler2.cs" />
     <Compile Include="EventHandler\TestEventHandler1.cs" />
     <Compile Include="Events\AccountNrOfContactsSetEvent.cs" />

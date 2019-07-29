@@ -52,5 +52,20 @@ namespace Xrm.UnitTests.Resolver
             Assert.IsTrue(@event.IsHandled1);
             Assert.IsTrue(@event.IsHandled2);
         }
+
+        [TestMethod]
+        public void EventIsExecutedAfterCommand()
+        {
+            var context = new XrmFakedContext();
+
+            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()));
+
+            TestCommand cmd = new TestCommand { IsHandled = false };
+
+            cmdBus.Handle(cmd);
+
+            Assert.IsTrue(TestCommandExecutedEvent.IsHandled);
+        }
     }
 }
+
