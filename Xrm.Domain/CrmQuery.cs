@@ -6,7 +6,7 @@ using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain
 {
-    public abstract class CrmQuery<TEntity> : IQuery where TEntity : Entity
+    public abstract class CrmQuery<TEntity> where TEntity : Entity
     {
         protected IOrganizationService OrgService { get; }
         protected string EntityName { get; }

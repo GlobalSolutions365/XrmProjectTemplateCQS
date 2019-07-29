@@ -76,7 +76,6 @@
     <Compile Include="Interfaces\IHandleCommand.cs" />
     <Compile Include="Interfaces\IHandleEvent.cs" />
     <Compile Include="Interfaces\IOrganizationServiceWrapper.cs" />
-    <Compile Include="Interfaces\IQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
