@@ -21,7 +21,9 @@ namespace Xrm.Domain.CommandHandlers
 
         public override AccountNrOfContactsSetEvent Execute(SetAccountNrOfContactsCommand command)
         {
-            if(command?.FromContact?.ParentCustomerId == null)
+            command.FromContact = command.FromContact ?? throw new ArgumentNullException(nameof(command.FromContact));
+
+            if (command.FromContact.ParentCustomerId == null)
             {
                 return null;
             }
