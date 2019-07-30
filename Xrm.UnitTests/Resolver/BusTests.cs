@@ -6,6 +6,7 @@ using Xrm.Domain.Commands;
 using Xrm.Domain.Events;
 using Xrm.Models.Crm;
 using Xrm.Models.Interfaces;
+using Xrm.UnitTests.Fakes;
 
 namespace Xrm.UnitTests.Resolver
 {
@@ -17,7 +18,7 @@ namespace Xrm.UnitTests.Resolver
         {
             var context = new XrmFakedContext();
 
-            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()));
+            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()), new FakeTracingService());
 
             TestCommand cmd = new TestCommand { IsHandled = false };
 
@@ -31,7 +32,7 @@ namespace Xrm.UnitTests.Resolver
         {
             var context = new XrmFakedContext();
 
-            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService(), context.GetOrganizationService()));
+            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService(), context.GetOrganizationService()), new FakeTracingService());
 
             SetAccountNrOfContactsCommand cmd = new SetAccountNrOfContactsCommand { FromContact = new Contact() };
 
@@ -43,7 +44,7 @@ namespace Xrm.UnitTests.Resolver
         {
             var context = new XrmFakedContext();
 
-            IEventBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()));
+            IEventBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()), new FakeTracingService());
 
             TestEvent @event = new TestEvent();
 
@@ -58,7 +59,7 @@ namespace Xrm.UnitTests.Resolver
         {
             var context = new XrmFakedContext();
 
-            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()));
+            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()), new FakeTracingService());
 
             TestCommand cmd = new TestCommand { IsHandled = false };
 

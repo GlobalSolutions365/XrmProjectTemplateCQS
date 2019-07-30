@@ -1,13 +1,12 @@
-﻿using Microsoft.Xrm.Sdk;
-using Autofac;
-using System.Collections.Generic;
-using System.Reflection;
-using Xrm.Models.Interfaces;
-using Xrm.Domain;
+﻿using Autofac;
 using Autofac.Core;
+using Microsoft.Xrm.Sdk;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Xrm.Domain;
 using Xrm.Models.Attrbutes;
-using Xrm.Domain.Queries;
+using Xrm.Models.Interfaces;
 
 namespace Xrm.Base
 {
@@ -15,7 +14,7 @@ namespace Xrm.Base
     {
         private readonly IContainer container = null;
 
-        public Bus(IOrganizationServiceWrapper orgServiceWrapper)
+        public Bus(IOrganizationServiceWrapper orgServiceWrapper, ITracingService tracingService)
         {
             var builder = new ContainerBuilder();
 
@@ -23,6 +22,7 @@ namespace Xrm.Base
 
             builder.RegisterInstance<IEventBus>(this);
             builder.RegisterInstance(orgServiceWrapper);
+            builder.RegisterInstance(tracingService);
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleCommand<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(CrmQuery<>));

@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk;
 using Xrm.Base;
 using Xrm.Models.Crm;
 using Xrm.Models.Interfaces;
+using Xrm.UnitTests.Fakes;
 
 namespace Xrm.UnitTests
 {
@@ -14,9 +15,11 @@ namespace Xrm.UnitTests
 
         protected OrganizationServiceWrapper OrgServiceWrapper => new OrganizationServiceWrapper(OrgService);
 
-        protected ICommandBus CmdBus => new Bus(OrgServiceWrapper);
+        protected ITracingService FakeTracing = new FakeTracingService();
 
-        protected IEventBus EventBus => new Bus(OrgServiceWrapper);
+        protected ICommandBus CmdBus => new Bus(OrgServiceWrapper, FakeTracing);
+
+        protected IEventBus EventBus => new Bus(OrgServiceWrapper, FakeTracing);
 
     }
 }

@@ -84,7 +84,7 @@ namespace Xrm.Plugin.Base
             //TODO: Refactor this
             if (CommandBus == null)
             {
-                CommandBus = new Bus(localcontext.OrgServiceWrapper);
+                CommandBus = new Bus(localcontext.OrgServiceWrapper, localcontext.TracingService);
             }
             #endregion
 

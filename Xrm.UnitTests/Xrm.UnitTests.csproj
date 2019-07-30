@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="BaseCrmTest.cs" />
     <Compile Include="Domain\CommandHandlers\SetAccountNrOfContactsCommandHandlerTests.cs" />
+    <Compile Include="Fakes\FakeTracingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolver\BusTests.cs" />
   </ItemGroup>
