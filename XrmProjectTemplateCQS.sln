@@ -21,6 +21,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowVisualizer", "Tools\Flo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xrm.WorkflowActivities", "Xrm.WorkflowActivities\Xrm.WorkflowActivities.csproj", "{526E9B4E-AC35-4CBF-A6F1-451076C3D9AD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{C50CF7CC-BC79-4D24-9A3E-939190E6BEE8}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{84F148DD-0F4E-45F4-B13B-768BB7CD8EB9}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\Images\Components.svg = Docs\Images\Components.svg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +76,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{23AAC55B-5634-49C3-82B6-3079E6F686A3} = {E26010C3-AB27-4D91-A939-2120969C39E5}
 		{0272C836-FE6C-4249-933C-3B9775E8B998} = {E26010C3-AB27-4D91-A939-2120969C39E5}
+		{84F148DD-0F4E-45F4-B13B-768BB7CD8EB9} = {C50CF7CC-BC79-4D24-9A3E-939190E6BEE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FDE34FC2-64F2-4A3D-90A1-626F51B9C886}
