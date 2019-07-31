@@ -19,6 +19,8 @@ namespace Xrm.UnitTests
 
         protected ICommandBus CmdBus => new Bus(OrgServiceWrapper, FakeTracing);
 
+        protected ICommandBus CmdBusWithNoEventPropagation => new Bus(OrgServiceWrapper, FakeTracing) { DoNotPropagateEvents = true };
+
         protected IEventBus EventBus => new Bus(OrgServiceWrapper, FakeTracing);
 
     }

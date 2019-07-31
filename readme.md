@@ -249,6 +249,95 @@ The example above might seem a bit complex at first, but bear in mind all you re
 
 Again the purpose here is to have small, maintainable and testable classes instead of 5000 line long monster "Services" and "Repositories".
 
+## Testing
+
+As mentioned a few times before, one of the main purpose of the proposed architecture is encourage unit testing. Small classes with dedicated purposes make it easy. 
+
+For unit testing command and event handlers the following path can be used:
+1. Setup CRM state (if required).
+1. Setup a command / event.
+1. Pass it to the bus.
+1. Assert the output event is correct.
+1. Assert the CRM state is correct (if required).
+
+> The bus has a property called ```DoNotPropagateEvents``` which will stop any event propagation. By default it's obviosly false, but you should set it to true if you want to test a single command or event handler.   
+> On the other hand if what you want to test is the full flow - leave it as false, start from a command and assert the resulting state of the system is what you expect.
+
+For queries it's even simpler:
+1. Setup CRM state.
+1. Run the query.
+1. Assert the result is what you expect it to be.
+
+The solution contains a sample unit testing project called Xrm.UnitTest which is pre-configured and ready to go. It uses the <a href="https://github.com/jordimontana82/fake-xrm-easy" target="_blank">Fake-Xrm-Easy</a> library for creating an in-memory version of CRM / Dynamics CE. There are other libraries like this avaialble, but this one is very easy to use and performant.
+
+The Xrm.UnitTest project contains a helper class called ```BaseCrmTest``` from which all unit tests should inherit. It takes care of wiring up all required components, makes the test classes smaller and avoids code repetetions.
+
+This is how a sample unit test clas would look like:
+
+```csharp
+[TestClass]
+public class SetAccountNrOfContactsCommandHandlerTests : BaseCrmTest
+{
+    private readonly Guid accountId = Guid.NewGuid();
+    private readonly Guid triggerContactId = Guid.NewGuid();
+
+    public SetAccountNrOfContactsCommandHandlerTests()
+    {
+        Account account = new Account { Id = accountId, Name = "" };
+        Contact[] contacts = new[]
+        {
+            new Contact { Id = Guid.NewGuid(), ParentCustomerId = null },
+            new Contact { Id = triggerContactId, ParentCustomerId = new EntityReference(Account.EntityLogicalName, accountId) },
+            new Contact { Id = Guid.NewGuid(), ParentCustomerId = new EntityReference(Account.EntityLogicalName, Guid.NewGuid() ) },
+            new Contact { Id = Guid.NewGuid(), ParentCustomerId = new EntityReference(Account.EntityLogicalName, accountId) },
+            new Contact { Id = Guid.NewGuid(), ParentCustomerId = null },
+        };
+
+        Context.Initialize(new Entity[] { account }.Union(contacts));
+    }
+
+    [TestMethod]
+    public void AccountsNameIsCorrectlySet()
+    {
+        SetAccountNrOfContactsCommand cmd = new SetAccountNrOfContactsCommand { FromContact = GetTriggeringContact() };
+
+        CmdBusWithNoEventPropagation.Handle(cmd);
+
+        Account account = GetTargetAccount();
+
+        Assert.AreEqual($"I have 2 contacts", account.Name);
+    }
+
+    [TestMethod]
+    public void ThrowsArgumentNullExceptionWhenPassingNullContact()
+    {
+        SetAccountNrOfContactsCommand cmd = new SetAccountNrOfContactsCommand { FromContact = null };
+
+        Assert.ThrowsException<ArgumentNullException>(() => CmdBus.Handle(cmd));
+    }
+
+    private Contact GetTriggeringContact()
+    {
+        return OrgService.Retrieve(Contact.EntityLogicalName, triggerContactId, new ColumnSet(true))
+                         .ToEntity<Contact>();
+    }
+
+    private Account GetTargetAccount()
+    {
+        return OrgService.Retrieve(Account.EntityLogicalName, accountId, new ColumnSet(true))
+                      .ToEntity<Account>();
+    }
+}
+```
+
+The setup is pretty straightforward:
+1. Initialize the CRM state inside the constructor, by calling ```Context.Initialize(Entity[] entities)```.
+1. Perform you unit tests.
+
+You can notice a few things:
+1. ```OrgService``` is the faked organization service reference.
+1. ```CmdBus``` is the standard command bus.
+1. ```CmdBusWithNoEventPropagation``` is a command bus with the ```DoNotPropagateEvents``` property set to ```true```.
 
 
 ## Leveraging on other Open Source projects

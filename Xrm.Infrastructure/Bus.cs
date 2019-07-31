@@ -12,7 +12,10 @@ namespace Xrm.Base
 {
     public class Bus : ICommandBus, IEventBus
     {
+        public bool DoNotPropagateEvents { get; set; } = false; // Useful for unit testing
+
         private readonly IContainer container = null;
+        
 
         public Bus(IOrganizationServiceWrapper orgServiceWrapper, ITracingService tracingService)
         {
@@ -44,6 +47,8 @@ namespace Xrm.Base
 
         public void NotifyListenersAbout(IEvent @event)
         {
+            if (DoNotPropagateEvents) { return; }
+
             using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
                 var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());

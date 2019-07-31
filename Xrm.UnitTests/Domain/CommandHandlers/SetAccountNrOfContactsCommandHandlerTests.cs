@@ -34,7 +34,7 @@ namespace Xrm.UnitTests.Domain.CommandHandlers
         {
             SetAccountNrOfContactsCommand cmd = new SetAccountNrOfContactsCommand { FromContact = GetTriggeringContact() };
 
-            CmdBus.Handle(cmd);
+            CmdBusWithNoEventPropagation.Handle(cmd);
 
             Account account = GetTargetAccount();
 
