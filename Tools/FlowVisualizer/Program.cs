@@ -23,7 +23,7 @@ namespace FlowVisualizer
             {
                 (Type parameterType, Type resultType) = GetFlowTypes(commandHandler);
 
-                Console.WriteLine(Format(commandHandler, parameterType, resultType, 0));
+                WriteTypeToConsole(commandHandler, parameterType, resultType, 0);
 
                 VisualizeEvents(domain, resultType, 1, new List<Type>());
 
@@ -39,11 +39,14 @@ namespace FlowVisualizer
             {
                 (Type parameterType, Type resultType) = GetFlowTypes(eventHandler);                
 
-                Console.WriteLine(Format(eventHandler, parameterType, resultType, level));
+                WriteTypeToConsole(eventHandler, parameterType, resultType, level);
 
                 if (previousEventParameters.Contains(resultType))
                 {
-                    Console.WriteLine($"!!! Infinite loop detected. The result type {resultType.Name} is used as a parameter previously in the event chain.");
+                    using(new Color(ConsoleColor.Red))
+                    { 
+                        Console.WriteLine($"!!! Infinite loop detected. The result type {resultType.Name} is used as a parameter previously in the event chain.");
+                    }
                     return;
                 }
 
@@ -82,11 +85,16 @@ namespace FlowVisualizer
             return (genericArguments[0], genericArguments[1]);
         }
 
-        private static string Format(Type type, Type parameter, Type result, int level)
+        private static void WriteTypeToConsole(Type type, Type parameter, Type result, int level)
         {
-            string padding = new string(' ', level * 4);
+            Console.Write(new string(' ', level * 4));
 
-            return $"{padding}{type.Name}: {parameter.Name} -> {result.Name}";
+            using(new Color(ConsoleColor.Cyan))
+            {
+                Console.Write(type.Name);
+            }
+
+            Console.WriteLine($": { parameter.Name} -> {result.Name}");
         }
     }
 }

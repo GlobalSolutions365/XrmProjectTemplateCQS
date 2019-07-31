@@ -386,6 +386,28 @@ You can notice a few things:
 
 ## Tools
 
+### Built-in
+
+Figuring out the exact flow of commands and events can become confusing. Part of the solution is a simple tool called **FlowVisualizer** found in Tools\FlowVisualizer. It's a simple console application that prints scans the Domain assembly (containing your commands, events etc.) and prints out a visual representation of the configured flow.
+
+Additionally it also detect infinite event loops, which might help detect errors in the configuration. An event loop is if an event handler further in the flow produces an event that was handled previously.
+
+For example consider this flow:
+```
+    CommandHandler1: Command1 -> Event1
+        -> EventHandler1: Event1 -> Event2
+            -> EventHandler2: Event2 -> Event1
+                -> EventHandler1: Event1 -> Event2
+                    -> EventHandler2: Event2 -> Event1
+                        -> ...
+```
+EventHandler1 procuces Event2, then EventHandler2 produces Event1 and it starts looping.
+
+An example output of the tool currently looks like this:
+![Components](Docs/Images/FlowVisualizer.png)
+
+> You can save the output to a text file, by running ```FlowVisualizer.exe > output.txt```
+
 ### External
 
 Except the obvious dependency on the Microsoft CRM SDK, the solution uses the following Open Source tools and libraries:
