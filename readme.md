@@ -186,7 +186,7 @@ public abstract class CommandHandler<TCommand, TPostEvent>
     public abstract TPostEvent Execute(TCommand command);
 }
 ```
-(Simplified a little but compared to the actual implementation, but not much ;))
+(Simplified a little compared to the actual implementation, but not much :wink:)
 
 1. It calls the virtual ```Validate``` method, with the command as argument. Because the method is virtual it's not required to be implemented in classes extending ```CommandHandler<TCommand, TResultEvent>```. If you want to implement your own validation it should be here. Either return false if you want it to silently fail (stop the flow) or throw an exception if you want it to be loud :bomb:.
 2. It calls the abstract ```Execute``` method, which takes in the command and returns an event. This method is abstract, so it's required to be implemented (else the whole command handler wouldn't make much sense).
@@ -246,6 +246,8 @@ You might wander about this line: ```return VoidEvent;```. Fortunately the is no
 That's it.
 
 The example above might seem a bit complex at first, but bear in mind all you really need to do is create the command / event POCO classes and implement the ```Execute``` methods of their respective handlers. When you create a new handler and inherti from ```CommandHandler<T1,T2>``` or ```EventHandler<T1,T2>``` most of the code (including the minimum required constructor) will be generated automatically by Visual Studio if you Ctr+Space a few time on the red squiggles.
+
+Again the purpose here is to have small, maintainable and testable classes instead of 5000 line long monster "Services" and "Repositories".
 
 
 
