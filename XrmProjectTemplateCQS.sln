@@ -30,6 +30,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{84F148DD-0F4E-45F4-B13B-768BB7CD8EB9}"
 	ProjectSection(SolutionItems) = preProject
 		Docs\Images\Components.svg = Docs\Images\Components.svg
+		Docs\Images\FlowVisualizer.png = Docs\Images\FlowVisualizer.png
 	EndProjectSection
 EndProject
 Global
