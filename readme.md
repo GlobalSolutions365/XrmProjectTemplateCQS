@@ -388,7 +388,7 @@ You can notice a few things:
 
 ### Built-in
 
-Figuring out the exact flow of commands and events can become confusing. Part of the solution is a simple tool called **FlowVisualizer** found in Tools\FlowVisualizer. It's a simple console application that prints scans the Domain assembly (containing your commands, events etc.) and prints out a visual representation of the configured flow.
+Figuring out the exact flow of commands and events can become confusing. Part of the solution is a simple tool called **FlowVisualizer** found in Tools\FlowVisualizer. It's a simple console application that scans the Domain assembly (containing your commands, events etc.) and prints out a visual representation of the configured flows.
 
 Additionally it also detect infinite event loops, which might help detect errors in the configuration. An event loop is if an event handler further in the flow produces an event that was handled previously.
 
@@ -401,7 +401,7 @@ For example consider this flow:
                     -> EventHandler2: Event2 -> Event1
                         -> ...
 ```
-EventHandler1 procuces Event2, then EventHandler2 produces Event1 and it starts looping.
+EventHandler1 procuces Event2, then EventHandler2 produces Event1 and it starts looping. If you try to run such a plugin in CRM it would most likely just time out or maybe produce a stack overflow exception.
 
 An example output of the tool currently looks like this:
 ![Components](Docs/Images/FlowVisualizer.png)
@@ -424,6 +424,16 @@ Setup is pretty straightforward:
 3. Run GenerateCSharpContext.fsx for refreshing the early bound entities. Notice the list of entities to include in the generated file.
 4. Run PluginSyncDev.fsx for syncing your plugins to the development environment
 
+> TODO: Mention issues with CRM pre 9
+
 #### Fake-XRM-Easy
 
 Unit testing framework for Dynamics CRM / CE projects. Full docs found <a href="https://dynamicsvalue.com/" target="_blank">here</a>.
+
+#### Autofac
+
+TODO: Fill in
+
+#### ILMerge
+
+TODO: Fill in
