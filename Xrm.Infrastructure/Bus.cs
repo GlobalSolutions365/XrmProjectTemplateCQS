@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Xrm.Domain;
-using Xrm.Models.Attrbutes;
+using Xrm.Models.Attributes;
 using Xrm.Models.Interfaces;
 
 namespace Xrm.Base

@@ -88,7 +88,7 @@
     <Compile Include="Events\LastNameChangedEvent.cs" />
     <Compile Include="EventHandler\LastNameChangedEventHandler.cs" />
     <Compile Include="Events\TestEvent.cs" />
-    <Compile Include="Events\VoidEvent.cs" />
+    <Compile Include="VoidEvent.cs" />
     <Compile Include="Events\TestCommandExecutedEvent.cs" />
     <Compile Include="Locator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
