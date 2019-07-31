@@ -381,4 +381,24 @@ You can notice a few things:
 1. ```CmdBusWithNoEventPropagation``` is a command bus with the ```DoNotPropagateEvents``` property set to ```true```.
 
 
-## Leveraging on other Open Source projects
+## Tools
+
+### External
+
+Except the obvious dependency on the Microsoft CRM SDK, the solution uses the following Open Source tools and libraries:
+
+#### DAXIF#
+
+This is a collection of tools and scripts for automating development of Dynamics CRM / CE solutions. It offers a lot of tools, details of which are described in the <a href="https://github.com/delegateas/Daxif" target="_blank">docs</a>. What the XRM Project Template CQS solution utilizes at this moment are only 2 of them:
+1. The ability to generate the early bound entities
+2. Automated plugin synchronization based on metadata in the code.
+
+Setup is pretty straightforward:
+1. Look into Tools\Scripts\Daxif.
+2. Open the _Config.fsx file and put in your development environment URL (and optionally credentials), solution name etc.
+3. Run GenerateCSharpContext.fsx for refreshing the early bound entities. Notice the list of entities to include in the generated file.
+4. Run PluginSyncDev.fsx for syncing your plugins to the development environment
+
+#### Fake-XRM-Easy
+
+Unit testing framework for Dynamics CRM / CE projects. Full docs found <a href="https://dynamicsvalue.com/" target="_blank">here</a>.
