@@ -29,14 +29,15 @@ The flow described above should look something like this:
 
 ```
 SetAccountNrOfContactsCommand
-   -> ChildContactsInNameSetEvent
-       -> ParentAccountChildContactCountSetInLastNameEvent
+   -> AccountNrOfContactsSetEvent
+       -> AccountChildContactCountSetInLastNameEvent
 ```
 
 Because the trigger will be an create or update of a Contact and part of the flow touches the same contact that triggered the flow, we'll implement it using 2 pre-operation plugins: ContactPreCreate and ContactPreUpdate.
 
 We start by defining the **Command** the plugins will be issuing. This can be something like:
-```
+
+```csharp
 public class SetAccountNrOfContactsCommand : ICommand
 {
     public Contact FromContact { get; set; }
@@ -152,5 +153,100 @@ public class SetAccountNrOfContactsCommandHandler : CommandHandler<SetAccountNrO
     }
 }
 ```
+
+A command handler is a class inheriting from ```CommandHandler<TCommand, TResultEvent>```. In other words it handler a command of type ```TCommand``` and when done produces an event of type ```TResultEvent```. In this case, according to the requirements we handle a ```SetAccountNrOfContactsCommand``` and raise an ```AccountNrOfContactsSetEvent```. All the required dependencies should be defines in the constructor. Two of them are required (by the base class) - ```IOrganizationServiceWrapper orgServiceWrapper``` (specific to plugins and custom workflow activities - aggregates the service in the context of the current user and the SYSTEM user) and ```IEventBus eventBus``` (for handling events), the rest depends only on what you need in the command handler. 
+
+> In the constructor take in only the dependencies you require in this specific command handler. Every command and event handler is constructed independently and on demand by the event bus. 
+> For passing around state use the Command and Event POCO objects.
+
+How does a command handler work? If you look at the source of ```CommandHandler<TCommand, TResultEvent>``` you'll see it's a simple implementation of the <a href="https://en.wikipedia.org/wiki/Template_method_pattern" target="_blank">template method pattern</a>.
+
+```csharp
+public abstract class CommandHandler<TCommand, TPostEvent>
+{
+    public CommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus)
+    {
+        // ...
+    }
+
+    public void Handle(TCommand command)
+    {
+        if (!Validate(command)) { return; }
+
+        TPostEvent postEvent = Execute(command);
+        
+        if(postEvent != null && postEvent.GetType() != typeof(Events.VoidEvent))
+        { 
+            eventBus.NotifyListenersAbout(postEvent);
+        }
+    }
+
+    public virtual bool Validate(TCommand command) { return true; }
+
+    public abstract TPostEvent Execute(TCommand command);
+}
+```
+(Simplified a little but compared to the actual implementation, but not much ;))
+
+1. It calls the virtual ```Validate``` method, with the command as argument. Because the method is virtual it's not required to be implemented in classes extending ```CommandHandler<TCommand, TResultEvent>```. If you want to implement your own validation it should be here. Either return false if you want it to silently fail (stop the flow) or throw an exception if you want it to be loud :bomb:.
+2. It calls the abstract ```Execute``` method, which takes in the command and returns an event. This method is abstract, so it's required to be implemented (else the whole command handler wouldn't make much sense).
+3. If the event is not-null and not an ```VoidEvent``` it will ask the event bus to notify all listeners about it (0 or more). Conversely if you return null or a ```VoidEvent``` the flow will stop at this command handler. 
+
+To finish up, we need to create the two events and event handlers. How this works is almost the same as for commands and command handlers.
+
+```csharp
+public class AccountNrOfContactsSetEvent : IEvent
+{
+    public Contact TargetContact { get; set; }
+}
+
+public class AccountNrOfContactsSetEventHandler : EventHandler<AccountNrOfContactsSetEvent, AccountChildContactCountSetInLastNameEvent>
+{
+    public AccountNrOfContactsSetEventHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+    {
+    }
+
+    public override AccountChildContactCountSetInLastNameEvent Execute(AccountNrOfContactsSetEvent @event)
+    {
+        // ...
+
+        return new AccountChildContactCountSetInLastNameEvent
+        {
+            // ...
+        };
+    }
+}
+
+public class AccountChildContactCountSetInLastNameEvent : IEvent
+{
+    // ...
+}
+
+public class AccountChildContactCountSetInLastNameEventHandler : EventHandler<AccountChildContactCountSetInLastNameEvent, VoidEvent>
+{
+    public AccountChildContactCountSetInLastNameEvent(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+    {
+    }
+
+    public override VoidEvent Execute(AccountChildContactCountSetInLastNameEvent @event)
+    {
+        // ...
+
+        return VoidEvent;
+    }
+}
+```
+
+We didn't fill in all the code above because it's mostly implementation detail, but it shows how a flow should be built out of it's simple building blocks.
+
+You might wander about this line: ```return VoidEvent;```. Fortunately the is nothing magical about it. There is a class called ``VoidEvent`` so this could be written like so ```return new VoidEvent()```, but that's a bit ugly. Similar on how ASP.NET MVC has factory methods inside the Controler class (like ```return View()```, instead of ```return new View()``` we have a simple factory property in both the ```CommandHandler<T1,T2>``` and ```EventHandler<T1,T2>``` base classes.
+
+```protected Events.VoidEvent VoidEvent => new Events.VoidEvent();```
+
+That's it.
+
+The example above might seem a bit complex at first, but bear in mind all you really need to do is create the command / event POCO classes and implement the ```Execute``` methods of their respective handlers. When you create a new handler and inherti from ```CommandHandler<T1,T2>``` or ```EventHandler<T1,T2>``` most of the code (including the minimum required constructor) will be generated automatically by Visual Studio if you Ctr+Space a few time on the red squiggles.
+
+
 
 ## Leveraging on other Open Source projects

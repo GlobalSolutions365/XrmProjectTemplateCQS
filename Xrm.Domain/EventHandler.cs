@@ -4,9 +4,9 @@ using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain
 {
-    public abstract class EventHandler<TEvent, TPostEvent> : IHandleEvent<TEvent> 
+    public abstract class EventHandler<TEvent, TResultEvent> : IHandleEvent<TEvent> 
         where TEvent : IEvent 
-        where TPostEvent : IEvent
+        where TResultEvent : IEvent
     {
         protected readonly IOrganizationServiceWrapper orgServiceWrapper;
         private readonly IEventBus eventBus;
@@ -21,17 +21,17 @@ namespace Xrm.Domain
         {
             if (!Validate(@event)) { return; }
 
-            TPostEvent postEvent = Execute(@event);
+            TResultEvent resultEvent = Execute(@event);
 
-            if (postEvent != null)
+            if (resultEvent != null)
             {
-                eventBus.NotifyListenersAbout(postEvent);
+                eventBus.NotifyListenersAbout(resultEvent);
             }
         }
 
         public virtual bool Validate(TEvent @event) { return true; }
 
-        public abstract TPostEvent Execute(TEvent @event);
+        public abstract TResultEvent Execute(TEvent @event);
 
         protected Events.VoidEvent VoidEvent => new Events.VoidEvent();
     }

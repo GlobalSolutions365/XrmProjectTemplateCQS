@@ -4,7 +4,7 @@ using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain
 {
-    public abstract class CommandHandler<TCommand, TPostEvent> : IHandleCommand<TCommand> where TCommand : ICommand where TPostEvent : IEvent
+    public abstract class CommandHandler<TCommand, TResultEvent> : IHandleCommand<TCommand> where TCommand : ICommand where TResultEvent : IEvent
     {
         protected readonly IOrganizationServiceWrapper orgServiceWrapper;
         private readonly IEventBus eventBus;
@@ -19,17 +19,17 @@ namespace Xrm.Domain
         {
             if (!Validate(command)) { return; }
 
-            TPostEvent postEvent = Execute(command);
+            TResultEvent resultEvent = Execute(command);
             
-            if(postEvent != null && postEvent.GetType() != typeof(Events.VoidEvent))
+            if(resultEvent != null && resultEvent.GetType() != typeof(Events.VoidEvent))
             { 
-                eventBus.NotifyListenersAbout(postEvent);
+                eventBus.NotifyListenersAbout(resultEvent);
             }
         }
 
         public virtual bool Validate(TCommand command) { return true; }
 
-        public abstract TPostEvent Execute(TCommand command);
+        public abstract TResultEvent Execute(TCommand command);
 
         protected Events.VoidEvent VoidEvent => new Events.VoidEvent();
     }
