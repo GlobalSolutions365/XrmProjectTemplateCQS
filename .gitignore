@@ -338,3 +338,10 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+
+
+
+# ######## CUSTOM ADDED #########
+# Do not ignore
+!/Tools/Scripts/Daxif/bin

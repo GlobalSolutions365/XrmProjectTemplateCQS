@@ -65,34 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
-    <Compile Include="CommandHandlers\InfiniteLoopCommandHandler.cs" />
-    <Compile Include="CommandHandlers\SetAccountNrOfContactsCommandHandler.cs" />
-    <Compile Include="CommandHandlers\TestCommandHandler.cs" />
-    <Compile Include="CommandHandlers\UpdateAccountNameCommandHandler.cs" />
-    <Compile Include="Commands\InfiniteLoopCommand.cs" />
-    <Compile Include="Commands\SetAccountNrOfContactsCommand.cs" />
-    <Compile Include="Commands\TestCommand.cs" />
-    <Compile Include="Commands\UpdateAccountNameCommand.cs" />
     <Compile Include="CrmQuery.cs" />
     <Compile Include="EventHandler.cs" />
-    <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler2.cs" />
-    <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler1.cs" />
-    <Compile Include="EventHandler\InfiniteLoopEvent2Handler.cs" />
-    <Compile Include="EventHandler\InifiniteLoopEvent1Handler.cs" />
-    <Compile Include="EventHandler\TestCommandExecutedEventHandler.cs" />
-    <Compile Include="EventHandler\TestEventHandler2.cs" />
-    <Compile Include="EventHandler\TestEventHandler1.cs" />
-    <Compile Include="Events\AccountNrOfContactsSetEvent.cs" />
-    <Compile Include="Events\InfiniteLoopEvent1.cs" />
-    <Compile Include="Events\InfiniteLoopEvent2.cs" />
-    <Compile Include="Events\LastNameChangedEvent.cs" />
-    <Compile Include="EventHandler\LastNameChangedEventHandler.cs" />
-    <Compile Include="Events\TestEvent.cs" />
-    <Compile Include="Events\VoidEvent.cs" />
-    <Compile Include="Events\TestCommandExecutedEvent.cs" />
     <Compile Include="Locator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\AccountQueries.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xrm.Models\Xrm.Models.csproj">
@@ -104,6 +80,12 @@
     <None Include="packages.config" />
     <None Include="Xrm.Domain.snk" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CommandHandlers\" />
+    <Folder Include="Commands\" />
+    <Folder Include="EventHandler\" />
+    <Folder Include="Events\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
