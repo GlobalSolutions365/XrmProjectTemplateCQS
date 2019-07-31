@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Attrbutes\InUserContextAttribute.cs" />
     <Compile Include="Attributes\InUserContextAttribute.cs" />
+    <Compile Include="Crm\OptionSetValueCollection.cs" />
     <Compile Include="Crm\OrganizationServiceWrapper.cs" />
     <Compile Include="Crm\XrmContext.cs" />
     <Compile Include="Crm\XrmExtensions.cs" />

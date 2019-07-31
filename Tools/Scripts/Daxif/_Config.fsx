@@ -69,7 +69,7 @@ Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
 
 module Path =
   let daxifRoot = __SOURCE_DIRECTORY__
-  let solutionRoot = daxifRoot ++ @"..\.."
+  let solutionRoot = daxifRoot ++ @"..\..\.."
   let toolsFolder = daxifRoot ++ @".."
   
   let webResourceProject = solutionRoot ++ @"WebResources"
