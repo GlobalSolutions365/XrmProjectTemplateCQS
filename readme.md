@@ -17,7 +17,10 @@
 	* [Testing](#testing)
 		* [Approach to testing](#approach-to-testing)
 		* [Example](#example)
-	* [Leveraging on other Open Source projects](#leveraging-on-other-open-source-projects)
+	* [Tools](#tools)
+		* [External](#external)
+			* [DAXIF#](#daxif)
+			* [Fake-XRM-Easy](#fake-xrm-easy)
 
 <!-- End Document Outline -->
 
