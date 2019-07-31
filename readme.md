@@ -1,9 +1,25 @@
 # XRM Project Template CQS
 
-[//]: # (TOC Begin)
+<!-- Start Document Outline -->
 
-[//]: # (TOC End)
+* [XRM Project Template CQS](#xrm-project-template-cqs)
+	* [Purpose](#purpose)
+	* [Commands, events and queries](#commands-events-and-queries)
+	* [How does it work?](#how-does-it-work)
+		* [The flow](#the-flow)
+		* [Command](#command)
+		* [Plugins](#plugins)
+		* [Queries](#queries)
+		* [Command handler](#command-handler)
+		* [Events and event handlers](#events-and-event-handlers)
+		* [VoidEvent?](#voidevent)
+		* [Summary](#summary)
+	* [Testing](#testing)
+		* [Approach to testing](#approach-to-testing)
+		* [Example](#example)
+	* [Leveraging on other Open Source projects](#leveraging-on-other-open-source-projects)
 
+<!-- End Document Outline -->
 
 ## Purpose
 
@@ -26,6 +42,8 @@ Commands and events depend on the queries (since often the decision what to do d
 
 ## How does it work?
 
+### The flow
+
 Let's assume we want to implement a flow like this: Whenever a contact is created or updated it's parent accounts name should be updated to reflect how many child contacts it has - something like "I have {N} contacts". After this is done, the contacts last name should be updated to something like "My parent account has {N} contacts". Then after this is done a not should be created on the contact with text like "I am a note".
 
 The solution involves a new component, that has previously not been mentioned - the command and event **bus**. Without going into details - it's something that's responsible for executing command handlers for commands and event handlers for events. Additionally it takes care of injecting all required dependencies.
@@ -40,6 +58,8 @@ SetAccountNrOfContactsCommand
 
 Because the trigger will be an create or update of a Contact and part of the flow touches the same contact that triggered the flow, we'll implement it using 2 pre-operation plugins: ContactPreCreate and ContactPreUpdate.
 
+### Command
+
 We start by defining the **Command** the plugins will be issuing. This can be something like:
 
 ```csharp
@@ -50,6 +70,8 @@ public class SetAccountNrOfContactsCommand : ICommand
 ```
 
 This is just a simple POCO class, implementing an empty ```ICommand``` interface.
+
+### Plugins
 
 Next let's create our two plugins:
 
@@ -99,6 +121,8 @@ If you don't recognize the above code, this is because the **XRM Project Templat
 
 All this plugin does is setup a simple **Command** a  and pass it over to the **Command bus**, which will try to find a suitable **Command handler** and execute it.
 
+### Queries
+
 Let's leave the **Command bus** implementation a black box. Ideally you will never need to touch it (except for maybe adding new dependencies into the DI Container - described later). Right now we have a **Command** so we need an corresponding **Command handler**. But we can also foresee it will need some way to get the number of child contacts of a certain account. So let's start by creating a query:
 
 ```csharp
@@ -121,6 +145,8 @@ public class AccountQueries : CrmQuery<Account>
 ```
 
 Any **Query** should be a class extending the abstract ```CrmQuery<TEntity>``` class. The command bus will automatically set any constructor injected dependencies. In this case we only need a reference to the ```IOrganizationService```. Next we just implement the query method we need, in this case ```GetNrOfContacts```.
+
+### Command handler
 
 Having the required query, we can implement the **Command handler**:
 
@@ -194,8 +220,10 @@ public abstract class CommandHandler<TCommand, TPostEvent>
 (Simplified a little compared to the actual implementation, but not much :wink:)
 
 1. It calls the virtual ```Validate``` method, with the command as argument. Because the method is virtual it's not required to be implemented in classes extending ```CommandHandler<TCommand, TResultEvent>```. If you want to implement your own validation it should be here. Either return false if you want it to silently fail (stop the flow) or throw an exception if you want it to be loud :bomb:.
-2. It calls the abstract ```Execute``` method, which takes in the command and returns an event. This method is abstract, so it's required to be implemented (else the whole command handler wouldn't make much sense).
-3. If the event is not-null and not an ```VoidEvent``` it will ask the event bus to notify all listeners about it (0 or more). Conversely if you return null or a ```VoidEvent``` the flow will stop at this command handler. 
+1. It calls the abstract ```Execute``` method, which takes in the command and returns an event. This method is abstract, so it's required to be implemented (else the whole command handler wouldn't make much sense).
+1. If the event is not-null and not an ```VoidEvent``` it will ask the event bus to notify all listeners about it (0 or more). Conversely if you return null or a ```VoidEvent``` the flow will stop at this command handler. 
+ 
+### Events and event handlers
 
 To finish up, we need to create the two events and event handlers. How this works is almost the same as for commands and command handlers.
 
@@ -244,9 +272,13 @@ public class AccountChildContactCountSetInLastNameEventHandler : EventHandler<Ac
 
 We didn't fill in all the code above because it's mostly implementation detail, but it shows how a flow should be built out of it's simple building blocks.
 
+### VoidEvent?
+
 You might wander about this line: ```return VoidEvent;```. Fortunately the is nothing magical about it. There is a class called ``VoidEvent`` so this could be written like so ```return new VoidEvent()```, but that's a bit ugly. Similar on how ASP.NET MVC has factory methods inside the Controler class (like ```return View()```, instead of ```return new View()``` we have a simple factory property in both the ```CommandHandler<T1,T2>``` and ```EventHandler<T1,T2>``` base classes.
 
 ```protected Events.VoidEvent VoidEvent => new Events.VoidEvent();```
+
+### Summary
 
 That's it.
 
@@ -255,6 +287,8 @@ The example above might seem a bit complex at first, but bear in mind all you re
 Again the purpose here is to have small, maintainable and testable classes instead of 5000 line long monster "Services" and "Repositories".
 
 ## Testing
+
+### Approach to testing
 
 As mentioned a few times before, one of the main purpose of the proposed architecture is encourage unit testing. Small classes with dedicated purposes make it easy. 
 
@@ -276,6 +310,8 @@ For queries it's even simpler:
 The solution contains a sample unit testing project called Xrm.UnitTest which is pre-configured and ready to go. It uses the <a href="https://github.com/jordimontana82/fake-xrm-easy" target="_blank">Fake-Xrm-Easy</a> library for creating an in-memory version of CRM / Dynamics CE. There are other libraries like this avaialble, but this one is very easy to use and performant.
 
 The Xrm.UnitTest project contains a helper class called ```BaseCrmTest``` from which all unit tests should inherit. It takes care of wiring up all required components, makes the test classes smaller and avoids code repetetions.
+
+### Example
 
 This is how a sample unit test clas would look like:
 
