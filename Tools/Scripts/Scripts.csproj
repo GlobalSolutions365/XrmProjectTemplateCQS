@@ -39,14 +39,6 @@
     <None Include="XrmContext\XrmContext.exe.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Delegate.Daxif, Version=4.2.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Delegate.Daxif.4.2.7\lib\net45\Delegate.Daxif.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Crm.Services.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Delegate.Daxif.4.2.7\lib\net45\Microsoft.Crm.Services.Utility.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Daxif\bin\Delegate.Daxif.dll" />
     <Content Include="Daxif\bin\Delegate.Daxif.xml" />
     <Content Include="Daxif\bin\FSharp.Core.dll" />
@@ -81,6 +73,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Delegate.Daxif, Version=4.2.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Delegate.Daxif.4.2.9\lib\net45\Delegate.Daxif.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Crm.Services.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Delegate.Daxif.4.2.9\lib\net45\Microsoft.Crm.Services.Utility.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
