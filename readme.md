@@ -389,6 +389,8 @@ You can notice a few things:
 1. ```CmdBus``` is the standard command bus.
 1. ```CmdBusWithNoEventPropagation``` is a command bus with the ```DoNotPropagateEvents``` property set to ```true```.
 
+## Custom dependencies
+
 
 ## Tools
 
@@ -410,7 +412,7 @@ For example consider this flow:
 EventHandler1 procuces Event2, then EventHandler2 produces Event1 and it starts looping. If you try to run such a plugin in CRM it would most likely just time out or maybe produce a stack overflow exception.
 
 An example output of the tool currently looks like this:
-![Components](Docs/Images/FlowVisualizer.png)
+![Flow visualizer](Docs/Images/FlowVisualizer.png)
 
 > You can save the output to a text file, by running ```FlowVisualizer.exe > output.txt```
 
@@ -438,8 +440,10 @@ Unit testing framework for Dynamics CRM / CE projects. Full docs found <a href="
 
 #### Autofac
 
-TODO: Fill in
+This very popular dependency injection container (or how its authors call it an Inversion of Control container) is used inside the command bus for dynamically creating instances of the command and event handlers. In most cases when using this solution template you won't need to interact with it, except the few cases when you need to introduce new dependencies. This is explained in more detail in the [Custom dependencies](#custom-dependencies) section.
 
 #### ILMerge
 
-TODO: Fill in
+The solution template contains multiple projects resulting in multiple output dll's. When you register a CRM plugin it needs to be a single dll (except the case you put some of them in the GAC / assembly\bin but that's an anti-pattern). The solution is to merge all dll's into a single one - that is what the popular ILMerge tool does. It's already configured to run at build for the current project setup, but you might need to look into into when adding new dependencies. The detection of merged assemblies is automatic. It merges all the assemblies in the output folder. In practice all you need to do is make sure the referenced dll you want to merge is configured with Copy Local equal to true, which is the default when you add a new reference. Just make sure to add all new references not only to the place where they are used (like the Xrm.Domain project), but also the Xrm.Plugins project. Take care to not "copy local" assemblies that shouldn't be merged into the result plugin - like the CRM SDK assemblies.
+
+![Copy local](Docs/Images/CopyLocal.png)
