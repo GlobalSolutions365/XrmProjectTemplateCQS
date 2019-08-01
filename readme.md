@@ -188,7 +188,7 @@ public class SetAccountNrOfContactsCommandHandler : CommandHandler<SetAccountNrO
 }
 ```
 
-A command handler is a class inheriting from ```CommandHandler<TCommand, TResultEvent>```. In other words it handler a command of type ```TCommand``` and when done produces an event of type ```TResultEvent```. In this case, according to the requirements we handle a ```SetAccountNrOfContactsCommand``` and raise an ```AccountNrOfContactsSetEvent```. All the required dependencies should be defines in the constructor. Two of them are required (by the base class) - ```IOrganizationServiceWrapper orgServiceWrapper``` (specific to plugins and custom workflow activities - aggregates the service in the context of the current user and the SYSTEM user) and ```IEventBus eventBus``` (for handling events), the rest depends only on what you need in the command handler. 
+A command handler is a class inheriting from ```CommandHandler<TCommand, TResultEvent>```. In other words it handles a command of type ```TCommand``` and when done produces an event of type ```TResultEvent```. In this case, according to the requirements, we handle a ```SetAccountNrOfContactsCommand``` and raise an ```AccountNrOfContactsSetEvent```. All the required dependencies should be defines in the constructor. Two of them are required (by the base class) - ```IOrganizationServiceWrapper orgServiceWrapper``` (specific to plugins and custom workflow activities - aggregates the service in the context of the current user and the SYSTEM user) and ```IEventBus eventBus``` (for handling events), the rest depends only on what you need in the command handler. 
 
 > In the constructor take in only the dependencies you require in this specific command handler. Every command and event handler is constructed independently and on demand by the event bus. 
 > For passing around state use the Command and Event POCO objects.
@@ -235,7 +235,9 @@ public class AccountNrOfContactsSetEvent : IEvent
 {
     public Contact TargetContact { get; set; }
 }
+```
 
+```csharp
 public class AccountNrOfContactsSetEventHandler : EventHandler<AccountNrOfContactsSetEvent, AccountChildContactCountSetInLastNameEvent>
 {
     public AccountNrOfContactsSetEventHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
@@ -252,12 +254,16 @@ public class AccountNrOfContactsSetEventHandler : EventHandler<AccountNrOfContac
         };
     }
 }
+```
 
+```csharp
 public class AccountChildContactCountSetInLastNameEvent : IEvent
 {
     // ...
 }
+```
 
+```csharp
 public class AccountChildContactCountSetInLastNameEventHandler : EventHandler<AccountChildContactCountSetInLastNameEvent, VoidEvent>
 {
     public AccountChildContactCountSetInLastNameEvent(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
@@ -277,7 +283,7 @@ We didn't fill in all the code above because it's mostly implementation detail, 
 
 ### VoidEvent?
 
-You might wander about this line: ```return VoidEvent;```. Fortunately the is nothing magical about it. There is a class called ``VoidEvent`` so this could be written like so ```return new VoidEvent()```, but that's a bit ugly. Similar on how ASP.NET MVC has factory methods inside the Controler class (like ```return View()```, instead of ```return new View()``` we have a simple factory property in both the ```CommandHandler<T1,T2>``` and ```EventHandler<T1,T2>``` base classes.
+You might wander about this line: ```return VoidEvent;```. Fortunately the is nothing magical about it. There is a class called ``VoidEvent`` so this could be written like so ```return new VoidEvent()```, but that's a bit ugly. Similar to how ASP.NET MVC has factory methods inside the Controler class (like ```return View()```, instead of ```return new View()``` we have a simple factory property in both the ```CommandHandler<T1,T2>``` and ```EventHandler<T1,T2>``` base classes.
 
 ```protected Events.VoidEvent VoidEvent => new Events.VoidEvent();```
 
@@ -285,7 +291,7 @@ You might wander about this line: ```return VoidEvent;```. Fortunately the is no
 
 That's it.
 
-The example above might seem a bit complex at first, but bear in mind all you really need to do is create the command / event POCO classes and implement the ```Execute``` methods of their respective handlers. When you create a new handler and inherti from ```CommandHandler<T1,T2>``` or ```EventHandler<T1,T2>``` most of the code (including the minimum required constructor) will be generated automatically by Visual Studio if you Ctr+Space a few time on the red squiggles.
+The example above might seem a bit complex at first, but bear in mind all you really need to do is create the command / event POCO classes and implement the ```Execute``` methods of their respective handlers. When you create a new handler and inherit from ```CommandHandler<T1,T2>``` or ```EventHandler<T1,T2>``` most of the code (including the minimum required constructor) will be generated automatically by Visual Studio if you Ctr+Space a few time on the red squiggles.
 
 Again the purpose here is to have small, maintainable and testable classes instead of 5000 line long monster "Services" and "Repositories".
 
@@ -295,7 +301,7 @@ Again the purpose here is to have small, maintainable and testable classes inste
 
 As mentioned a few times before, one of the main purpose of the proposed architecture is encourage unit testing. Small classes with dedicated purposes make it easy. 
 
-For unit testing command and event handlers the following path can be used:
+For unit testing command and event handlers the following convension can be used:
 1. Setup CRM state (if required).
 1. Setup a command / event.
 1. Pass it to the bus.
@@ -316,7 +322,7 @@ The Xrm.UnitTest project contains a helper class called ```BaseCrmTest``` from w
 
 ### Example
 
-This is how a sample unit test clas would look like:
+This is how a sample unit test class would look like:
 
 ```csharp
 [TestClass]
@@ -390,7 +396,7 @@ You can notice a few things:
 
 Figuring out the exact flow of commands and events can become confusing. Part of the solution is a simple tool called **FlowVisualizer** found in Tools\FlowVisualizer. It's a simple console application that scans the Domain assembly (containing your commands, events etc.) and prints out a visual representation of the configured flows.
 
-Additionally it also detect infinite event loops, which might help detect errors in the configuration. An event loop is if an event handler further in the flow produces an event that was handled previously.
+Additionally it also detect infinite event loops, which might help detect errors in the configuration. An event loop happens when an event handler further in the flow produces an event that was handled previously.
 
 For example consider this flow:
 ```
