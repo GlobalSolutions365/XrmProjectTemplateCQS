@@ -389,8 +389,13 @@ You can notice a few things:
 1. ```CmdBus``` is the standard command bus.
 1. ```CmdBusWithNoEventPropagation``` is a command bus with the ```DoNotPropagateEvents``` property set to ```true```.
 
+## Solution components
+
+// TODO
+
 ## Custom dependencies
 
+// TODO
 
 ## Tools
 
