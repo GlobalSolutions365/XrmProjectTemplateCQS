@@ -30,6 +30,9 @@ namespace Xrm.Base
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(CrmQuery<>));
 
+            /// Add custom dependencies below
+            /// --- End of custom added dependencties
+
             container = builder.Build();
         }
 

@@ -452,10 +452,54 @@ Those are commands, not plugins. The only role of a plugin is to ***route*** eve
 
 Just like on the picture above, it might be a good idea to create a separate folder for each entity, to not end up with hundreds of files on the same level.
 
+### Xrm.UnitTests
+
+Sample unit testing project, with the Fake-XRM-Easy library pre-configured. See [Testing](#testing) for more details.
+
+### Xrm.WorkflowActivities
+
+![Xrm.Plugins project](Docs/Images/XrmWorkflowActivitiesProject.png)
+
+Sample project for creating custom workflow activities (which should see less usage, because of custom actions, but still have their place). Unfortunately the DAXIF# scripts don't support automatically syncing those, so it has to be done manually. References to the Infrastructure and Domain projects have been added. When creating new workflow activities, they should inherit from ```Base\BaseActivity.cs```, which will wire up all dependencies and give you an instance of the command bus to work with.
 
 ## Custom dependencies
 
-// TODO
+The command / event bus takes care of constructor injecting dependencies into any required command or evewnt handler. In the base template this includes the following:
+1. The CRM organization service wrapper ```OrganizationServiceWrapper``` (bundles together the organization service in the context of the current user and the system user)
+2. An instance of ```ITracingService```
+3. Any requested ```CrmQuery<TEntity>``` implementation
+
+When creating a solution you might need to include additional dependencies, like for example a JSON serializer or external web service client.
+
+The suggested approach is to add those to the ```Xrm.Infrastructure``` project and register them in the Autofac dependency injection container inside the constructor of the ```Bus``` class.
+
+```csharp
+public Bus(IOrganizationServiceWrapper orgServiceWrapper, ITracingService tracingService)
+{
+    var builder = new ContainerBuilder();
+
+    Assembly domain = typeof(Locator).Assembly;
+
+    builder.RegisterInstance<IEventBus>(this);
+    builder.RegisterInstance(orgServiceWrapper);
+    builder.RegisterInstance(tracingService);
+    builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleCommand<>));
+    builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
+    builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(CrmQuery<>));
+
+    /// Add custom dependencies below
+    /// --- End of custom added dependencties
+
+    container = builder.Build();
+}
+```
+
+Consult the <a href="https://autofac.readthedocs.io/en/latest/" target="_blank">Autofac docs</a> for specific instructions, but in many cases it's as simple as adding a single line like this:
+
+```csharp
+builder.RegisterIntance(new MyCustomDependency());
+```
+
 
 ## Tools
 

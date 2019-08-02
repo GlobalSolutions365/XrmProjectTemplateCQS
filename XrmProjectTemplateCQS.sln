@@ -33,6 +33,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{84F148
 		Docs\Images\CopyLocal.png = Docs\Images\CopyLocal.png
 		Docs\Images\FlowVisualizer.png = Docs\Images\FlowVisualizer.png
 		Docs\Images\SolutionComponents.png = Docs\Images\SolutionComponents.png
+		Docs\Images\XrmDomainProject.cs.png = Docs\Images\XrmDomainProject.cs.png
+		Docs\Images\XrmInfrastructureProject.png = Docs\Images\XrmInfrastructureProject.png
+		Docs\Images\XrmModelsProject.png = Docs\Images\XrmModelsProject.png
+		Docs\Images\XrmPluginsProject.png = Docs\Images\XrmPluginsProject.png
 	EndProjectSection
 EndProject
 Global
