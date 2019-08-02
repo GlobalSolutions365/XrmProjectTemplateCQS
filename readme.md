@@ -17,10 +17,18 @@
 	* [Testing](#testing)
 		* [Approach to testing](#approach-to-testing)
 		* [Example](#example)
+	* [Solution components](#solution-components)
+		* [Xrm.Domain](#xrmdomain)
+		* [Xrm.Infrastructure](#xrminfrastructure)
+		* [Xrm.Models](#xrmmodels)
+	* [Custom dependencies](#custom-dependencies)
 	* [Tools](#tools)
+		* [Built-in](#built-in)
 		* [External](#external)
 			* [DAXIF#](#daxif)
 			* [Fake-XRM-Easy](#fake-xrm-easy)
+			* [Autofac](#autofac)
+			* [ILMerge](#ilmerge)
 
 <!-- End Document Outline -->
 
@@ -33,13 +41,13 @@ As the name suggests the template enforces an CQS inspired coding style. There s
 ## Commands, events and queries
 
 The program flow is created using 3 main building blocks:
-1. Commands - telling the system to do something, for example "UpdateChildContactCount" command in the context of an Account. Each **command** should by design have exactly one **command handler**, which contains the implementation of handling the command.
-2. Events - telling the system that something has happened, for example "ChildContactCountUpdated". Each **event** can have any number (0..N) subscribed **event handlers**, which contain the implementation of handling the event.
+1. Commands - telling the system to do something, for example "UpdateChildContactCount" command in the context of an Account. Each ***command*** should by design have exactly one ***command handler***, which contains the implementation of handling the command.
+2. Events - telling the system that something has happened, for example "ChildContactCountUpdated". Each ***event*** can have any number (0..N) subscribed ***event handlers***, which contain the implementation of handling the event.
 3. Queries - used to retrieve data from CRM
 
 Commands and events depend on the queries (since often the decision what to do depends on data we need to retrieve). 
 
-**Queries** depend only on CRM. Commands and events don't do any query data directly, instead they do it through the queries. **Commands**, when done, can raise events. **Events**, when done, can raise events. The image below depicts their interactions.
+***Queries*** depend only on CRM. Commands and events don't do any query data directly, instead they do it through the queries. ***Commands***, when done, can raise events. ***Events***, when done, can raise events. The image below depicts their interactions.
 
 ![Components](Docs/Images/Components.svg)
 
@@ -63,7 +71,7 @@ Because the trigger will be an create or update of a Contact and part of the flo
 
 ### Command
 
-We start by defining the **Command** the plugins will be issuing. This can be something like:
+We start by defining the ***Command*** the plugins will be issuing. This can be something like:
 
 ```csharp
 public class SetAccountNrOfContactsCommand : ICommand
@@ -120,13 +128,13 @@ public class ContactPreUpdate : Base.Plugin
 }
 ```
 
-If you don't recognize the above code, this is because the **XRM Project Template** uses a slightly customized version of the <a href="https://github.com/delegateas/Daxif/" target="_blank">Delegate DAXIF#</a> framework. The main feature we utilize here is automatic plugin registration, based on metadata in the code itself - the ```RegisterPluginStep``` method. Also all the things you would normally expect in the plugin, like obtaining the CRM's ``IOrganizationService`` reference, ``ITracingService`` and ``IPluginExecutionContext`` are already handled in the ```Base.Plugin```. This follows the philosophy, explained on top of this page, of avoiding any unnecessary filler code and focusing only on what is absolutely required. 
+If you don't recognize the above code, this is because the ***XRM Project Template*** uses a slightly customized version of the <a href="https://github.com/delegateas/Daxif/" target="_blank">Delegate DAXIF#</a> framework. The main feature we utilize here is automatic plugin registration, based on metadata in the code itself - the ```RegisterPluginStep``` method. Also all the things you would normally expect in the plugin, like obtaining the CRM's ``IOrganizationService`` reference, ``ITracingService`` and ``IPluginExecutionContext`` are already handled in the ```Base.Plugin```. This follows the philosophy, explained on top of this page, of avoiding any unnecessary filler code and focusing only on what is absolutely required. 
 
-All this plugin does is setup a simple **Command** a  and pass it over to the **Command bus**, which will try to find a suitable **Command handler** and execute it.
+All this plugin does is setup a simple ***Command*** a  and pass it over to the ***Command bus***, which will try to find a suitable ***Command handler*** and execute it.
 
 ### Queries
 
-Let's leave the **Command bus** implementation a black box. Ideally you will never need to touch it (except for maybe adding new dependencies into the DI Container - described later). Right now we have a **Command** so we need an corresponding **Command handler**. But we can also foresee it will need some way to get the number of child contacts of a certain account. So let's start by creating a query:
+Let's leave the ***Command bus*** implementation a black box. Ideally you will never need to touch it (except for maybe adding new dependencies into the DI Container - described later). Right now we have a ***Command*** so we need an corresponding ***Command handler***. But we can also foresee it will need some way to get the number of child contacts of a certain account. So let's start by creating a query:
 
 ```csharp
 public class AccountQueries : CrmQuery<Account>
@@ -147,11 +155,11 @@ public class AccountQueries : CrmQuery<Account>
 }
 ```
 
-Any **Query** should be a class extending the abstract ```CrmQuery<TEntity>``` class. The command bus will automatically set any constructor injected dependencies. In this case we only need a reference to the ```IOrganizationService```. Next we just implement the query method we need, in this case ```GetNrOfContacts```.
+Any ***Query*** should be a class extending the abstract ```CrmQuery<TEntity>``` class. The command bus will automatically set any constructor injected dependencies. In this case we only need a reference to the ```IOrganizationService```. Next we just implement the query method we need, in this case ```GetNrOfContacts```.
 
 ### Command handler
 
-Having the required query, we can implement the **Command handler**:
+Having the required query, we can implement the ***Command handler***:
 
 ```csharp
 public class SetAccountNrOfContactsCommandHandler : CommandHandler<SetAccountNrOfContactsCommand, AccountNrOfContactsSetEvent>
@@ -391,7 +399,59 @@ You can notice a few things:
 
 ## Solution components
 
-// TODO
+The XRM Project Template CQS solution is built out of multiple projects.
+
+![Solution components](Docs/Images/SolutionComponents.png)
+
+Let's look into their purpose one by one.
+
+### Xrm.Domain
+
+![Xrm.Domain project](Docs/Images/XrmDomainProject.cs.png)
+
+This is the project you'll be working with the most. It holds are the core components - commands, command handlers, events, event handlers and queries. By convention they should be placed into their appropriate folders / namespaces, although technically the whole assembly is scanned, so they will work fine wherever you place them.
+
+> It's absolutely fine and even recommended to create a deeper structure. So instead of putting all commands directly into the ```Commands``` folder you might create sub folders like ```\Commands\Marketing```, ```\Commands\Security```, ```\Commands\SharePointIntegration``` etc. Same goes for command handlers, events, event handlers and queries.
+
+> Do not delete the files at the root of the project. Those are common classes which are required for the solution to work.
+
+### Xrm.Infrastructure
+
+![Xrm.Infrastructure project](Docs/Images/XrmInfrastructureProject.png)
+
+Common place for shared infrastructure code. Initially it only contains the implementation of the command / event bus, but you might extend this with your own dependencies.
+
+### Xrm.Models
+
+![Xrm.Models project](Docs/Images/XrmModelsProject.png)
+
+This project contains the solution shared model classes. These include some infrastructure related interfaces and attributes and the generated CRM early bound entities (inside the Crm folder).
+
+The Crm folder also contains some helper classes generated by the DAXIF# scripts.
+
+> Note: The solution uses the latest version of the DAXIF# scripts, which are built for CRM 9 and have some helper methods to handle multi value option sets. This helper code is generated automatically every time you refresh the CRM early bound entities, so it's not suitable for editing. In order to make that work with earlier (pre 9) version of the SDK a fake ``OptionSetValueCollection`` class has been added in ```Xrm.Models\Crm\OptionSetValueCollection.cs```. It can (and probably should) be deleted if you're working with CRM 9 or later.
+> Needless to say - don't use the multi value option set helper methods if you're working with CRM older than version 9.
+
+### Xrm.Plugins
+
+![Xrm.Plugins project](Docs/Images/XrmPluginsProject.png)
+
+Contains the CRM plugins. See the [Plugins](#plugins) section for more information about how they should be structured. All the plugins should do create a command with the appropriate state and ask the command bus to handle it. ***They should not*** contain any business logic baked in. That is the responsibility of command and event handlers.
+
+The general approach should be one plugin per entity / event / stage combination, so there are valid plugins:
+1. PreAccountCreate
+1. PostAnyEntityRetrieve
+1. PostContactSetStateDynamicEntity
+
+But these are not:
+1. CopyContactInfoToLeadPlugin
+1. SharePointSecuritySyncPlugin
+1. CalculateTotalValuePlugin
+
+Those are commands, not plugins. The only role of a plugin is to ***route*** events in CRM into appropriate commands. It also maps perfectly into the DAXIF# automatic plugin registration tooling.
+
+Just like on the picture above, it might be a good idea to create a separate folder for each entity, to not end up with hundreds of files on the same level.
+
 
 ## Custom dependencies
 
@@ -401,7 +461,7 @@ You can notice a few things:
 
 ### Built-in
 
-Figuring out the exact flow of commands and events can become confusing. Part of the solution is a simple tool called **FlowVisualizer** found in Tools\FlowVisualizer. It's a simple console application that scans the Domain assembly (containing your commands, events etc.) and prints out a visual representation of the configured flows.
+Figuring out the exact flow of commands and events can become confusing. Part of the solution is a simple tool called ***FlowVisualizer*** found in Tools\FlowVisualizer. It's a simple console application that scans the Domain assembly (containing your commands, events etc.) and prints out a visual representation of the configured flows.
 
 Additionally it also detect infinite event loops, which might help detect errors in the configuration. An event loop happens when an event handler further in the flow produces an event that was handled previously.
 
@@ -437,7 +497,7 @@ Setup is pretty straightforward:
 3. Run GenerateCSharpContext.fsx for refreshing the early bound entities. Notice the list of entities to include in the generated file.
 4. Run PluginSyncDev.fsx for syncing your plugins to the development environment
 
-> TODO: Mention issues with CRM pre 9
+> See the note in [Xrm.Models](#xrmmodels) when working with CRM 9 or later
 
 #### Fake-XRM-Easy
 
