@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain.Events
 {
-    public class TestTransactionalEvent2
+    public class TestTransactionalEvent2 : IEvent
     {
-        
+
     }
 }

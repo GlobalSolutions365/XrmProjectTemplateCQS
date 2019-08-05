@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xrm.Domain.Commands;
-using Xrm.Domain.Events;
+using Xrm.Models.Crm;
 using Xrm.Models.Flow;
 
 namespace Xrm.Domain.CommandHandlers
@@ -15,9 +10,13 @@ namespace Xrm.Domain.CommandHandlers
         {
         }
 
-        public override TestTransactionalEvent1 Execute(TestTransactionalCommand command)
+        public override Events.TestTransactionalEvent1 Execute(Commands.TestTransactionalCommand command)
         {
-            throw new NotImplementedException();
+            var contact = new Contact { Id = Guid.NewGuid(), FirstName = "Test", LastName = $"From command {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}" };
+
+            orgServiceWrapper.TransactionalOrgServiceAsSystem.Create(contact);
+
+            return new Events.TestTransactionalEvent1 { ContactFromCommandId = contact.Id };
         }
     }
 }

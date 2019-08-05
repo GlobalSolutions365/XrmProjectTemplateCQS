@@ -85,7 +85,7 @@
     <Compile Include="EventHandler\TestEventHandler2.cs" />
     <Compile Include="EventHandler\TestEventHandler1.cs" />
     <Compile Include="EventHandler\TestTransactionalEvent2Handler.cs" />
-    <Compile Include="EventHandler\TestTransactionalEventHandler1.cs" />
+    <Compile Include="EventHandler\TestTransactionalEvent1Handler.cs" />
     <Compile Include="Events\AccountNrOfContactsSetEvent.cs" />
     <Compile Include="Events\InfiniteLoopEvent1.cs" />
     <Compile Include="Events\InfiniteLoopEvent2.cs" />

@@ -75,12 +75,11 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Delegate.Daxif, Version=4.2.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Delegate.Daxif.4.2.9\lib\net45\Delegate.Daxif.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Delegate.Daxif, Version=4.2.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Delegate.Daxif.4.2.10\lib\net45\Delegate.Daxif.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Services.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Delegate.Daxif.4.2.9\lib\net45\Microsoft.Crm.Services.Utility.dll</HintPath>
+      <HintPath>..\..\packages\Delegate.Daxif.4.2.10\lib\net45\Microsoft.Crm.Services.Utility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

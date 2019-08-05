@@ -4,6 +4,6 @@ namespace Xrm.Domain.Commands
 {
     public class TestTransactionalCommand : ICommand
     {
-
+        
     }
 }
