@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 using System;
+using Xrm.Infrastructure;
 using Xrm.Models.Crm;
 using Xrm.Models.Interfaces;
 
@@ -14,6 +15,8 @@ namespace Xrm.Plugin.Base
         internal IPluginExecutionContext PluginExecutionContext { get; }
 
         internal ITracingService TracingService { get; }
+
+        internal ICommandBus CommandBus { get; private set; }
 
         #region XrmProjectTemplate
         public Entity GetTarget()
@@ -54,7 +57,15 @@ namespace Xrm.Plugin.Base
             IOrganizationService orgService = factory.CreateOrganizationService(this.PluginExecutionContext.UserId);
             IOrganizationService orgServiceAsSystem = factory.CreateOrganizationService(null);
 
-            OrgServiceWrapper = new OrganizationServiceWrapper(orgService, orgServiceAsSystem);
+            OrgServiceWrapper = new OrganizationServiceWrapper(orgService, orgServiceAsSystem, new TransactionalService(orgService), new TransactionalService(orgServiceAsSystem));
+
+            #region XrmProjectTemplateQOS
+            //TODO: Refactor this
+            if (CommandBus == null)
+            {
+                CommandBus = new Bus(OrgServiceWrapper, TracingService);
+            }
+            #endregion
         }
 
         internal void Trace(string message)

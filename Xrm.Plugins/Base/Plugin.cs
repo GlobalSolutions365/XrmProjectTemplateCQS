@@ -5,8 +5,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
-using Xrm.Base;
-using Xrm.Models.Interfaces;
 using ExtendedStepConfig = System.Tuple<int, int, string, int, string, string>;
 using ImageTuple = System.Tuple<string, string, int, string>;
 // StepConfig           : className, ExecutionStage, EventOperation, LogicalName
@@ -21,8 +19,6 @@ namespace Xrm.Plugin.Base
     /// </summary>    
     public abstract class Plugin : IPlugin
     {
-        internal ICommandBus CommandBus { get; private set; }
-
         private Collection<Tuple<int, string, string, Action<LocalPluginContext>>> registeredEvents;
 
         /// <summary>
@@ -79,14 +75,6 @@ namespace Xrm.Plugin.Base
 
             // Construct the Local plug-in context.
             LocalPluginContext localcontext = new LocalPluginContext(serviceProvider);
-
-            #region XrmProjectTemplateQOS
-            //TODO: Refactor this
-            if (CommandBus == null)
-            {
-                CommandBus = new Bus(localcontext.OrgServiceWrapper, localcontext.TracingService);
-            }
-            #endregion
 
             localcontext.Trace(string.Format(CultureInfo.InvariantCulture, "Entered {0}.Execute()", this.ChildClassName));
 

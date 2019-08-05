@@ -6,5 +6,7 @@ namespace Xrm.Models.Interfaces
     {
         IOrganizationService OrgService { get; }
         IOrganizationService OrgServiceAsSystem { get; }
+        IOrganizationService TransactionalOrgService { get; }
+        IOrganizationService TransactionalOrgServiceAsSystem { get; }
     }
 }

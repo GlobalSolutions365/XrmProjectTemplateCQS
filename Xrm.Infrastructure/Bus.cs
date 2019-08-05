@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
 using Microsoft.Xrm.Sdk;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,17 +9,22 @@ using Xrm.Domain;
 using Xrm.Models.Attributes;
 using Xrm.Models.Interfaces;
 
-namespace Xrm.Base
+namespace Xrm.Infrastructure
 {
     public class Bus : ICommandBus, IEventBus
     {
         public bool DoNotPropagateEvents { get; set; } = false; // Useful for unit testing
 
         private readonly IContainer container = null;
-        
+
+        private readonly IOrganizationServiceWrapper orgServiceWrapper = null;
+
+
 
         public Bus(IOrganizationServiceWrapper orgServiceWrapper, ITracingService tracingService)
         {
+            this.orgServiceWrapper = orgServiceWrapper ?? throw new ArgumentNullException(nameof(orgServiceWrapper));
+
             var builder = new ContainerBuilder();
 
             Assembly domain = typeof(Locator).Assembly;
@@ -45,6 +51,15 @@ namespace Xrm.Base
                 dynamic handler = scope.Resolve(handlerType, ContextBasedQueryOrgServiceResolver(scope));
 
                 handler.Handle((dynamic)command);
+
+                if(orgServiceWrapper.TransactionalOrgService is TransactionalService transactionOrgService)
+                {
+                    transactionOrgService.Commit();
+                }
+                if (orgServiceWrapper.TransactionalOrgServiceAsSystem is TransactionalService transactionOrgServiceAsSystem)
+                {
+                    transactionOrgServiceAsSystem.Commit();
+                }
             }
         }
 

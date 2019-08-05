@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using System.Activities;
-using Xrm.Base;
+using Xrm.Infrastructure;
 using Xrm.Models.Crm;
 using Xrm.Models.Interfaces;
 
@@ -24,8 +24,8 @@ namespace Xrm.WorkflowActivities.Base
             TracingService = executionContext.GetExtension<ITracingService>() as ITracingService;
             WorkflowContext = executionContext.GetExtension<IWorkflowContext>() as IWorkflowContext;
             IOrganizationService orgService = factory.CreateOrganizationService(WorkflowContext.UserId) as IOrganizationService;
-            IOrganizationService  orgServiceAsSystem = factory.CreateOrganizationService(null) as IOrganizationService;
-            OrgServiceWrapper = new OrganizationServiceWrapper(orgService, orgServiceAsSystem);
+            IOrganizationService orgServiceAsSystem = factory.CreateOrganizationService(null) as IOrganizationService;
+            OrgServiceWrapper = new OrganizationServiceWrapper(orgService, orgServiceAsSystem, new TransactionalService(orgService), new TransactionalService(orgServiceAsSystem));
             CommandBus = new Bus(OrgServiceWrapper, TracingService);
 
             InternalExecute();

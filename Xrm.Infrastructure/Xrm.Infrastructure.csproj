@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Bus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransactionalService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xrm.Domain\Xrm.Domain.csproj">

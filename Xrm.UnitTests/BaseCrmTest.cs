@@ -1,6 +1,6 @@
 ﻿using FakeXrmEasy;
 using Microsoft.Xrm.Sdk;
-using Xrm.Base;
+using Xrm.Infrastructure;
 using Xrm.Models.Crm;
 using Xrm.Models.Interfaces;
 using Xrm.UnitTests.Fakes;

@@ -1,9 +1,8 @@
 ﻿using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using Xrm.Base;
 using Xrm.Domain.Commands;
 using Xrm.Domain.Events;
+using Xrm.Infrastructure;
 using Xrm.Models.Crm;
 using Xrm.Models.Interfaces;
 using Xrm.UnitTests.Fakes;
