@@ -19,7 +19,7 @@ namespace Xrm.Domain.EventHandler
 
             orgServiceWrapper.TransactionalOrgServiceAsSystem.Update(contactToUpdate);
 
-            return new Events.TestTransactionalEvent2();
+            return new Events.TestTransactionalEvent2 { TargetAccount = @event .TargetAccount };
         }
     }
 }

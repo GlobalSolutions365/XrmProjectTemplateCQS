@@ -15,12 +15,11 @@ namespace Xrm.Plugin.Account
         {
             Ctx.Account targetAccount = localContext.GetTarget<Ctx.Account>();
 
-            var updateAccountName = new UpdateAccountNameCommand
+            var testTransactionalCommand = new TestTransactionalCommand
             {
-                TargetAccount = targetAccount,
-                Prefix = "Updated "
+                TargetAccount = targetAccount              
             };
-            localContext.CommandBus.Handle(updateAccountName);
+            localContext.CommandBus.Handle(testTransactionalCommand);
         }
     }
 }

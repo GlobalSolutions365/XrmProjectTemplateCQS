@@ -12,11 +12,17 @@ namespace Xrm.Domain.CommandHandlers
 
         public override Events.TestTransactionalEvent1 Execute(Commands.TestTransactionalCommand command)
         {
-            var contact = new Contact { Id = Guid.NewGuid(), FirstName = "Test", LastName = $"From command {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}" };
+            var contact = new Contact
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Test",
+                LastName = $"From command {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}",
+                ParentCustomerId = command.TargetAccount.ToEntityReference()
+            };
 
             orgServiceWrapper.TransactionalOrgServiceAsSystem.Create(contact);
 
-            return new Events.TestTransactionalEvent1 { ContactFromCommandId = contact.Id };
+            return new Events.TestTransactionalEvent1 { ContactFromCommandId = contact.Id, TargetAccount = command.TargetAccount };
         }
     }
 }

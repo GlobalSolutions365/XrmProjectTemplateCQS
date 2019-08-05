@@ -12,7 +12,13 @@ namespace Xrm.Domain.EventHandler
 
         public override Events.VoidEvent Execute(Events.TestTransactionalEvent2 @event)
         {
-            var contact = new Contact { Id = Guid.NewGuid(), FirstName = "Test", LastName = $"From event2 {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}" };
+            var contact = new Contact
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "Test",
+                LastName = $"From event2 {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}",
+                ParentCustomerId = @event.TargetAccount.ToEntityReference()
+            };
 
             orgServiceWrapper.TransactionalOrgServiceAsSystem.Create(contact);
 
