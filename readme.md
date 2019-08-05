@@ -166,9 +166,9 @@ public class SetAccountNrOfContactsCommandHandler : CommandHandler<SetAccountNrO
 {
     private readonly AccountQueries accountQueries;
 
-    public SetAccountNrOfContactsCommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus,
+    public SetAccountNrOfContactsCommandHandler(FlowArguments flowArgs,
         AccountQueries accountQueries)
-        : base(orgServiceWrapper, eventBus)
+        : base(flowArgs)
     {
         this.accountQueries = accountQueries ?? throw new ArgumentNullException(nameof(accountQueries));
     }
@@ -196,7 +196,7 @@ public class SetAccountNrOfContactsCommandHandler : CommandHandler<SetAccountNrO
 }
 ```
 
-A command handler is a class inheriting from ```CommandHandler<TCommand, TResultEvent>```. In other words it handles a command of type ```TCommand``` and when done produces an event of type ```TResultEvent```. In this case, according to the requirements, we handle a ```SetAccountNrOfContactsCommand``` and raise an ```AccountNrOfContactsSetEvent```. All the required dependencies should be defines in the constructor. Two of them are required (by the base class) - ```IOrganizationServiceWrapper orgServiceWrapper``` (specific to plugins and custom workflow activities - aggregates the service in the context of the current user and the SYSTEM user) and ```IEventBus eventBus``` (for handling events), the rest depends only on what you need in the command handler. 
+A command handler is a class inheriting from ```CommandHandler<TCommand, TResultEvent>```. In other words it handles a command of type ```TCommand``` and when done produces an event of type ```TResultEvent```. In this case, according to the requirements, we handle a ```SetAccountNrOfContactsCommand``` and raise an ```AccountNrOfContactsSetEvent```. All the required dependencies should be defines in the constructor. One of them - ```FlowArguments``` - is required by the base class, it bundles together the minimum required dependencies, like the ```IOrganizationServiceWrapper``` (specific to plugins and custom workflow activities - aggregates the service in the context of the current user and the SYSTEM user) and ```IEventBus``` (for handling events). All other dependencies are up to the author of the command handler.
 
 > In the constructor take in only the dependencies you require in this specific command handler. Every command and event handler is constructed independently and on demand by the event bus. 
 > For passing around state use the Command and Event POCO objects.
@@ -206,7 +206,7 @@ How does a command handler work? If you look at the source of ```CommandHandler<
 ```csharp
 public abstract class CommandHandler<TCommand, TPostEvent>
 {
-    public CommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus)
+    public CommandHandler(FlowArguments flowArgs)
     {
         // ...
     }
@@ -248,7 +248,7 @@ public class AccountNrOfContactsSetEvent : IEvent
 ```csharp
 public class AccountNrOfContactsSetEventHandler : EventHandler<AccountNrOfContactsSetEvent, AccountChildContactCountSetInLastNameEvent>
 {
-    public AccountNrOfContactsSetEventHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+    public AccountNrOfContactsSetEventHandler(FlowArguments flowArgs) : base(flowArgs)
     {
     }
 
@@ -274,7 +274,7 @@ public class AccountChildContactCountSetInLastNameEvent : IEvent
 ```csharp
 public class AccountChildContactCountSetInLastNameEventHandler : EventHandler<AccountChildContactCountSetInLastNameEvent, VoidEvent>
 {
-    public AccountChildContactCountSetInLastNameEvent(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+    public AccountChildContactCountSetInLastNameEvent(FlowArguments flowArgs) : base(flowArgs)
     {
     }
 
@@ -476,6 +476,8 @@ The suggested approach is to add those to the ```Xrm.Infrastructure``` project a
 ```csharp
 public Bus(IOrganizationServiceWrapper orgServiceWrapper, ITracingService tracingService)
 {
+    this.orgServiceWrapper = orgServiceWrapper ?? throw new ArgumentNullException(nameof(orgServiceWrapper));
+
     var builder = new ContainerBuilder();
 
     Assembly domain = typeof(Locator).Assembly;
@@ -483,6 +485,7 @@ public Bus(IOrganizationServiceWrapper orgServiceWrapper, ITracingService tracin
     builder.RegisterInstance<IEventBus>(this);
     builder.RegisterInstance(orgServiceWrapper);
     builder.RegisterInstance(tracingService);
+    builder.RegisterType(typeof(FlowArguments));
     builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleCommand<>));
     builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
     builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(CrmQuery<>));
@@ -499,6 +502,24 @@ Consult the <a href="https://autofac.readthedocs.io/en/latest/" target="_blank">
 ```csharp
 builder.RegisterIntance(new MyCustomDependency());
 ```
+
+## Handling transactions
+
+When creating plugins or custom workflow activities all interactions with CRM are automatically wrapped into a database transaction, so in case of errors (exceptions) everything is rolled back. This is not the case when developing external tools that *talk to* Dynamics CRM / CE. If in an external tool scenario (like a portal or batch jobs console application) you need transactional rollback functionality the SDK offers the ```ExecuteTransactionRequest```, which is supported by this template.
+
+The assumption here is that either the whole flow (of commands and events) should succeed or be rolled back. If you need transaction support on a more granular level this can be implemented manually.
+
+In the standard scenario you'd be using the ```orgServiceWrapper.OrgService``` and ```orgServiceWrapper.OrgServiceAsSystem``` CRM service references. If you need to wrap the requests into an ```ExecuteTransactionRequest```, the only change you need to do is use ```orgServiceWrapper.TransactionalOrgService``` or ```orgServiceWrapper.TransactionalOrgServiceAsSystem``` instead. All the requests you do (Create, Update, Delete, Execute, ...) will be queued up and executed in a single transaction **once the whole flow is completed** (the command handler and all event handlers have executed). 
+
+> **Important!** The ```orgServiceWrapper.TransactionalOrgService``` and ```orgServiceWrapper.TransactionalOrgServiceAsSystem``` have separate transactional request queues. If you use both within the same flow, there will be 2 independent transactions executed in CRM.
+
+> Because the transaction is only executed when the flow is completed, you will not be able to query the data you have created / updated while inside the flow. If you need to keep track of that, consider passing it through inside the event objects.
+
+> If you need ID's (GUID's) of records you create - so you can, for example, set them as a reference in another record - remember you *can* assign an ID to a record before it's created. CRM will use it when creating the record. Doing something like ```new MyEntity { Id = Guid.NewGuid() }``` should be OK in most scenarios. You can then pass that ID (or even the whole object) as part of the subsequent events.
+
+> There is no explicit commit or rollback. If the flow completes, all the queued up requests are executed inside a single transaction. This can either succeed or fail as a whole. If at any point an exception is thrown and the flow is broken, those requests will never be executed.
+
+> Each flow instance has it's own transaction queues. They are not shared.
 
 
 ## Tools
