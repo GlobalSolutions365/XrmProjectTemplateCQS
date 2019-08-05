@@ -11,9 +11,7 @@ namespace Xrm.Domain.CommandHandlers
     {
         private readonly AccountQueries accountQueries;
 
-        public SetAccountNrOfContactsCommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus,
-            AccountQueries accountQueries)
-            : base(orgServiceWrapper, eventBus)
+        public SetAccountNrOfContactsCommandHandler(Models.Flow.FlowArguments flowArgs, AccountQueries accountQueries) : base(flowArgs)          
         {
             this.accountQueries = accountQueries ?? throw new ArgumentNullException(nameof(accountQueries));
         }

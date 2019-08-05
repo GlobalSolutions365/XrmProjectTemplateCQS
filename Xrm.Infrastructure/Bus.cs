@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using Xrm.Domain;
 using Xrm.Models.Attributes;
+using Xrm.Models.Flow;
 using Xrm.Models.Interfaces;
 
 namespace Xrm.Infrastructure
@@ -32,6 +33,7 @@ namespace Xrm.Infrastructure
             builder.RegisterInstance<IEventBus>(this);
             builder.RegisterInstance(orgServiceWrapper);
             builder.RegisterInstance(tracingService);
+            builder.RegisterType(typeof(FlowArguments));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleCommand<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(CrmQuery<>));

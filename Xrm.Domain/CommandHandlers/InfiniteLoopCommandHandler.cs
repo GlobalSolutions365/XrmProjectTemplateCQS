@@ -7,7 +7,7 @@ namespace Xrm.Domain.CommandHandlers
 {
     public class InfiniteLoopCommandHandler : CommandHandler<InfiniteLoopCommand, InfiniteLoopEvent1>
     {
-        public InfiniteLoopCommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+        public InfiniteLoopCommandHandler(Models.Flow.FlowArguments flowArgs) : base(flowArgs)
         {
         }
 

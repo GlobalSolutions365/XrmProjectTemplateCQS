@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 using System;
+using Xrm.Models.Flow;
 using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain
@@ -9,10 +10,12 @@ namespace Xrm.Domain
         protected readonly IOrganizationServiceWrapper orgServiceWrapper;
         private readonly IEventBus eventBus;
 
-        public CommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus)
+        public CommandHandler(FlowArguments flowArgs)
         {
-            this.orgServiceWrapper = orgServiceWrapper ?? throw new ArgumentNullException(nameof(orgServiceWrapper));
-            this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
+            flowArgs = flowArgs ?? throw new ArgumentNullException(nameof(flowArgs));
+
+            this.orgServiceWrapper = flowArgs.OrgServiceWrapper;
+            this.eventBus = flowArgs.EventBus;
         }
 
         public void Handle(TCommand command)

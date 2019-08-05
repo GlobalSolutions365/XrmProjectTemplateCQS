@@ -6,7 +6,7 @@ namespace Xrm.Domain.EventHandler
 {
     public class TestEventHandler1 : EventHandler<TestEvent, VoidEvent>
     {
-        public TestEventHandler1(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+        public TestEventHandler1(Models.Flow.FlowArguments flowArgs) : base(flowArgs)
         {
         }
 

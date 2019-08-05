@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\AccountPostCreate.cs" />
     <Compile Include="Account\AccountPreCreate.cs" />
     <Compile Include="Base\Enums.cs" />
     <Compile Include="Base\IPluginStepConfig.cs" />

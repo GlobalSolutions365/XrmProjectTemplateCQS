@@ -5,7 +5,7 @@ namespace Xrm.Domain.EventHandler
 {
     public class LastNameChangedEventHandler : EventHandler<LastNameChangedEvent, VoidEvent>
     {
-        public LastNameChangedEventHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+        public LastNameChangedEventHandler(Models.Flow.FlowArguments flowArgs) : base(flowArgs)
         {
         }
 

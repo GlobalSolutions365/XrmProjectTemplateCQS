@@ -5,7 +5,7 @@ namespace Xrm.Domain.EventHandler
 {
     public class InifiniteLoopEvent1Handler : EventHandler<InfiniteLoopEvent1, InfiniteLoopEvent2>
     {
-        public InifiniteLoopEvent1Handler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+        public InifiniteLoopEvent1Handler(Models.Flow.FlowArguments flowArgs) : base(flowArgs)
         {
         }
 

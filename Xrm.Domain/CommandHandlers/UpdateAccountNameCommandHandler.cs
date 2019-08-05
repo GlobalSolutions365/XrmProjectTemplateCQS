@@ -7,7 +7,7 @@ namespace Xrm.Domain.CommandHandlers
 {
     public class UpdateAccountNameCommandHandler : CommandHandler<UpdateAccountNameCommand, VoidEvent>
     {
-        public UpdateAccountNameCommandHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+        public UpdateAccountNameCommandHandler(Models.Flow.FlowArguments flowArgs) : base(flowArgs)
         {
         }
 

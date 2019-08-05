@@ -69,6 +69,7 @@
     <Compile Include="Crm\OrganizationServiceWrapper.cs" />
     <Compile Include="Crm\XrmContext.cs" />
     <Compile Include="Crm\XrmExtensions.cs" />
+    <Compile Include="Flow\FlowArguments.cs" />
     <Compile Include="Interfaces\ICommand.cs" />
     <Compile Include="Interfaces\ICommandBus.cs" />
     <Compile Include="Interfaces\IEvent.cs" />

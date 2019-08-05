@@ -1,20 +1,22 @@
-﻿using Microsoft.Xrm.Sdk;
-using System;
+﻿using System;
+using Xrm.Models.Flow;
 using Xrm.Models.Interfaces;
 
 namespace Xrm.Domain
 {
-    public abstract class EventHandler<TEvent, TResultEvent> : IHandleEvent<TEvent> 
-        where TEvent : IEvent 
+    public abstract class EventHandler<TEvent, TResultEvent> : IHandleEvent<TEvent>
+        where TEvent : IEvent
         where TResultEvent : IEvent
     {
         protected readonly IOrganizationServiceWrapper orgServiceWrapper;
         private readonly IEventBus eventBus;
 
-        public EventHandler(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus)
+        public EventHandler(FlowArguments flowArgs)
         {
-            this.orgServiceWrapper = orgServiceWrapper ?? throw new ArgumentNullException(nameof(orgServiceWrapper));
-            this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
+            flowArgs = flowArgs ?? throw new ArgumentNullException(nameof(flowArgs));
+
+            this.orgServiceWrapper = flowArgs.OrgServiceWrapper;
+            this.eventBus = flowArgs.EventBus;
         }
 
         public void Handle(TEvent @event)

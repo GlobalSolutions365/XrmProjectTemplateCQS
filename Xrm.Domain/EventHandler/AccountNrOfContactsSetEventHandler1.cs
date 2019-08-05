@@ -5,7 +5,7 @@ namespace Xrm.Domain.EventHandler
 {
     public class AccountNrOfContactsSetEventHandler1 : EventHandler<AccountNrOfContactsSetEvent, VoidEvent>
     {
-        public AccountNrOfContactsSetEventHandler1(IOrganizationServiceWrapper orgServiceWrapper, IEventBus eventBus) : base(orgServiceWrapper, eventBus)
+        public AccountNrOfContactsSetEventHandler1(Models.Flow.FlowArguments flowArgs) : base(flowArgs)
         {
         }
 
