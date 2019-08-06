@@ -11,7 +11,7 @@ open DG.Daxif.Common.Utility
   
 // Prompts the developer for a username and password the first time a script is run.
 // It then stores these credentials in a local .daxif-file.
-let creds = Credentials.FromKey("Xrm")
+let creds = Credentials.FromKey("Crm9")
 
 
 // If you want to store login credentials directly in code, instead of in a local file, 
@@ -22,7 +22,7 @@ module Env =
   let dev = 
     Environment.Create(
       name = "Development",
-      url = "http://devsrv/d365/XRMServices/2011/Organization.svc",
+      url = "http://uds-hv-eval/crm9/XRMServices/2011/Organization.svc",
       ap = AuthenticationProviderType.OnlineFederation,
       creds = creds,
       args = fsi.CommandLineArgs
