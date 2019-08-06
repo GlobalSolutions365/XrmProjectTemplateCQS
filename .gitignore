@@ -340,4 +340,5 @@ ASALocalRun/
 healthchecksdb
 
 # ######### Custom added
+Tools/Scripts/Daxif/*.daxif
 !Tools/Scripts/Daxif/bin/
