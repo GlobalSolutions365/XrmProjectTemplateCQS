@@ -1,7 +1,9 @@
-﻿namespace Xrm.Models.Interfaces
+﻿using Xrm.Models.Flow;
+
+namespace Xrm.Models.Interfaces
 {
     public interface ICommandBus
     {
-        void Handle(ICommand command);
+        void Handle(ICommand command, FlowArguments flowArguments);
     }
 }

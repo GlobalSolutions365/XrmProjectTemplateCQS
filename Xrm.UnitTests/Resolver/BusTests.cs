@@ -5,23 +5,22 @@ using Xrm.Domain.Events;
 using Xrm.Infrastructure;
 using Xrm.Models.Crm;
 using Xrm.Models.Interfaces;
-using Xrm.UnitTests.Fakes;
 
 namespace Xrm.UnitTests.Resolver
 {
     [TestClass]
-    public class BusTests
+    public class BusTests : BaseCrmTest
     {
         [TestMethod]
         public void CanResolveCommandHandler()
         {
             var context = new XrmFakedContext();
 
-            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()), new FakeTracingService());
+            ICommandBus cmdBus = new Bus();
 
             TestCommand cmd = new TestCommand { IsHandled = false };
 
-            cmdBus.Handle(cmd);
+            cmdBus.Handle(cmd, FlowArgs);
 
             Assert.IsTrue(cmd.IsHandled);
         }
@@ -29,25 +28,21 @@ namespace Xrm.UnitTests.Resolver
         [TestMethod]
         public void CanResolveCommandHandlerWithUserContextRepo()
         {
-            var context = new XrmFakedContext();
-
-            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService(), context.GetOrganizationService()), new FakeTracingService());
+            ICommandBus cmdBus = new Bus();
 
             SetAccountNrOfContactsCommand cmd = new SetAccountNrOfContactsCommand { FromContact = new Contact() };
 
-            cmdBus.Handle(cmd);
+            cmdBus.Handle(cmd, FlowArgs);
         }
 
         [TestMethod]
         public void CanResolveEventHandlers()
         {
-            var context = new XrmFakedContext();
-
-            IEventBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()), new FakeTracingService());
+            IEventBus cmdBus = new Bus();
 
             TestEvent @event = new TestEvent();
 
-            cmdBus.NotifyListenersAbout(@event);
+            cmdBus.NotifyListenersAbout(@event, FlowArgs);
 
             Assert.IsTrue(@event.IsHandled1);
             Assert.IsTrue(@event.IsHandled2);
@@ -56,13 +51,11 @@ namespace Xrm.UnitTests.Resolver
         [TestMethod]
         public void EventIsExecutedAfterCommand()
         {
-            var context = new XrmFakedContext();
-
-            ICommandBus cmdBus = new Bus(new OrganizationServiceWrapper(context.GetOrganizationService()), new FakeTracingService());
+            ICommandBus cmdBus = new Bus();
 
             TestCommand cmd = new TestCommand { IsHandled = false };
 
-            cmdBus.Handle(cmd);
+            cmdBus.Handle(cmd, FlowArgs);
 
             Assert.IsTrue(TestCommandExecutedEvent.IsHandled);
         }

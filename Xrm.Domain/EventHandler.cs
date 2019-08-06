@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using System;
 using Xrm.Models.Flow;
 using Xrm.Models.Interfaces;
 
@@ -7,15 +8,19 @@ namespace Xrm.Domain
     public abstract class EventHandler<TEvent, TResultEvent> : IHandleEvent<TEvent>
         where TEvent : IEvent
         where TResultEvent : IEvent
-    {
-        protected readonly IOrganizationServiceWrapper orgServiceWrapper;
+    {        
         private readonly IEventBus eventBus;
+        private readonly FlowArguments flowArgs;
+
+        protected IOrganizationServiceWrapper OrgServiceWrapper { get; }
+        protected ITracingService TracingService { get; }
 
         public EventHandler(FlowArguments flowArgs)
         {
-            flowArgs = flowArgs ?? throw new ArgumentNullException(nameof(flowArgs));
+            this.flowArgs = flowArgs ?? throw new ArgumentNullException(nameof(flowArgs));
 
-            this.orgServiceWrapper = flowArgs.OrgServiceWrapper;
+            this.OrgServiceWrapper = flowArgs.OrgServiceWrapper;
+            this.TracingService = flowArgs.TracingService ?? throw new ArgumentNullException(nameof(flowArgs.TracingService));
             this.eventBus = flowArgs.EventBus;
         }
 
@@ -27,7 +32,7 @@ namespace Xrm.Domain
 
             if (resultEvent != null)
             {
-                eventBus.NotifyListenersAbout(resultEvent);
+                eventBus.NotifyListenersAbout(resultEvent, flowArgs);
             }
         }
 

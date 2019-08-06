@@ -34,7 +34,7 @@ namespace Xrm.UnitTests.Domain.CommandHandlers
         {
             SetAccountNrOfContactsCommand cmd = new SetAccountNrOfContactsCommand { FromContact = GetTriggeringContact() };
 
-            CmdBusWithNoEventPropagation.Handle(cmd);
+            CmdBusWithNoEventPropagation.Handle(cmd, FlowArgs);
 
             Account account = GetTargetAccount();
 
@@ -46,7 +46,7 @@ namespace Xrm.UnitTests.Domain.CommandHandlers
         {
             SetAccountNrOfContactsCommand cmd = new SetAccountNrOfContactsCommand { FromContact = null };
 
-            Assert.ThrowsException<ArgumentNullException>(() => CmdBus.Handle(cmd));
+            Assert.ThrowsException<ArgumentNullException>(() => CmdBus.Handle(cmd, FlowArgs));
         }
 
         private Contact GetTriggeringContact()

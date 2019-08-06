@@ -20,7 +20,7 @@ namespace Xrm.Domain.EventHandler
                 ParentCustomerId = @event.TargetAccount.ToEntityReference()
             };
 
-            orgServiceWrapper.TransactionalOrgServiceAsSystem.Create(contact);
+            OrgServiceWrapper.TransactionalOrgServiceAsSystem.Create(contact);
 
             return VoidEvent;
         }

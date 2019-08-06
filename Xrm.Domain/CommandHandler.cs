@@ -7,15 +7,19 @@ namespace Xrm.Domain
 {
     public abstract class CommandHandler<TCommand, TResultEvent> : IHandleCommand<TCommand> where TCommand : ICommand where TResultEvent : IEvent
     {
-        protected readonly IOrganizationServiceWrapper orgServiceWrapper;
         private readonly IEventBus eventBus;
+        private readonly FlowArguments flowArgs;
+
+        protected IOrganizationServiceWrapper OrgServiceWrapper { get; }
+        protected ITracingService TracingService { get; }
 
         public CommandHandler(FlowArguments flowArgs)
         {
-            flowArgs = flowArgs ?? throw new ArgumentNullException(nameof(flowArgs));
+            this.flowArgs = flowArgs ?? throw new ArgumentNullException(nameof(flowArgs));
 
-            this.orgServiceWrapper = flowArgs.OrgServiceWrapper;
-            this.eventBus = flowArgs.EventBus;
+            this.OrgServiceWrapper = flowArgs.OrgServiceWrapper ?? throw new ArgumentNullException(nameof(flowArgs.OrgServiceWrapper));
+            this.TracingService = flowArgs.TracingService ?? throw new ArgumentNullException(nameof(flowArgs.TracingService));
+            this.eventBus = flowArgs.EventBus ?? throw new ArgumentNullException(nameof(flowArgs.EventBus));
         }
 
         public void Handle(TCommand command)
@@ -26,7 +30,7 @@ namespace Xrm.Domain
             
             if(resultEvent != null && resultEvent.GetType() != typeof(Events.VoidEvent))
             { 
-                eventBus.NotifyListenersAbout(resultEvent);
+                eventBus.NotifyListenersAbout(resultEvent, flowArgs);
             }
         }
 

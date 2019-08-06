@@ -19,7 +19,7 @@ namespace Xrm.Plugin.Contact
             {
                 FromContact = targetContact
             };
-            localContext.CommandBus.Handle(setAccountNrOfContactsCommand);
+            localContext.Handle(setAccountNrOfContactsCommand);
         }
     }
 }

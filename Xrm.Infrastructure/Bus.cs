@@ -18,22 +18,13 @@ namespace Xrm.Infrastructure
 
         private readonly IContainer container = null;
 
-        private readonly IOrganizationServiceWrapper orgServiceWrapper = null;
-
-
-
-        public Bus(IOrganizationServiceWrapper orgServiceWrapper, ITracingService tracingService)
-        {
-            this.orgServiceWrapper = orgServiceWrapper ?? throw new ArgumentNullException(nameof(orgServiceWrapper));
-
+        public Bus()
+        {           
             var builder = new ContainerBuilder();
 
             Assembly domain = typeof(Locator).Assembly;
 
-            builder.RegisterInstance<IEventBus>(this);
-            builder.RegisterInstance(orgServiceWrapper);
-            builder.RegisterInstance(tracingService);
-            builder.RegisterType(typeof(FlowArguments));
+            builder.RegisterInstance<IEventBus>(this);           
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleCommand<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(IHandleEvent<>));
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(CrmQuery<>));
@@ -44,28 +35,28 @@ namespace Xrm.Infrastructure
             container = builder.Build();
         }
 
-        public void Handle(ICommand command)
+        public void Handle(ICommand command, FlowArguments flowArguments)
         {
             using (ILifetimeScope scope = container.BeginLifetimeScope())
             {
                 var handlerType = typeof(IHandleCommand<>).MakeGenericType(command.GetType());
 
-                dynamic handler = scope.Resolve(handlerType, ContextBasedQueryOrgServiceResolver(scope));
+                dynamic handler = scope.Resolve(handlerType, FlowArgumentsResolver(flowArguments), QueryResolver(scope, flowArguments.OrgServiceWrapper));
 
                 handler.Handle((dynamic)command);
 
-                if(orgServiceWrapper.TransactionalOrgService is TransactionalService transactionOrgService)
+                if(flowArguments.OrgServiceWrapper.TransactionalOrgService is TransactionalService transactionOrgService)
                 {
                     transactionOrgService.Commit();
                 }
-                if (orgServiceWrapper.TransactionalOrgServiceAsSystem is TransactionalService transactionOrgServiceAsSystem)
+                if (flowArguments.OrgServiceWrapper.TransactionalOrgServiceAsSystem is TransactionalService transactionOrgServiceAsSystem)
                 {
                     transactionOrgServiceAsSystem.Commit();
                 }
             }
         }
 
-        public void NotifyListenersAbout(IEvent @event)
+        public void NotifyListenersAbout(IEvent @event, FlowArguments flowArguments)
         {
             if (DoNotPropagateEvents) { return; }
 
@@ -74,7 +65,7 @@ namespace Xrm.Infrastructure
                 var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
                 var enumerableOfHandlersType = typeof(IEnumerable<>).MakeGenericType(handlerType);
 
-                dynamic listeners = scope.Resolve(enumerableOfHandlersType, ContextBasedQueryOrgServiceResolver(scope));
+                dynamic listeners = scope.Resolve(enumerableOfHandlersType, FlowArgumentsResolver(flowArguments), QueryResolver(scope, flowArguments.OrgServiceWrapper));
 
                 foreach (dynamic listener in listeners)
                 {
@@ -83,7 +74,15 @@ namespace Xrm.Infrastructure
             }
         }
 
-        private ResolvedParameter ContextBasedQueryOrgServiceResolver(ILifetimeScope scope)
+        private ResolvedParameter FlowArgumentsResolver(FlowArguments flowArguments)
+        {
+            return new ResolvedParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(FlowArguments),
+                    (pi, ctx) => flowArguments                    
+                );
+        }
+
+        private ResolvedParameter QueryResolver(ILifetimeScope scope, IOrganizationServiceWrapper orgServiceWrapper)
         {
             return new ResolvedParameter(
                     (pi, ctx) =>
@@ -99,9 +98,6 @@ namespace Xrm.Infrastructure
                     {
                         // Check if it has the [InUserContext] attribute
                         bool useUserContextService = pi.CustomAttributes.Any(attr => attr.AttributeType == typeof(InUserContextAttribute));
-
-                        // This contains both the system context and user context CRM service connections
-                        IOrganizationServiceWrapper orgServiceWrapper = scope.Resolve<IOrganizationServiceWrapper>();
 
                         // Inject the correct CRM service reference
                         object resolvedQueryHandler = scope.Resolve(pi.ParameterType, new ResolvedParameter(

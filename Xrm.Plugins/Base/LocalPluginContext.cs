@@ -16,9 +16,9 @@ namespace Xrm.Plugin.Base
 
         internal ITracingService TracingService { get; }
 
-        internal ICommandBus CommandBus { get; private set; }
-
         #region XrmProjectTemplate
+        private readonly Bus bus;
+
         public Entity GetTarget()
         {
             return (Entity)this.PluginExecutionContext.InputParameters["Target"];
@@ -37,12 +37,10 @@ namespace Xrm.Plugin.Base
         #endregion
 
 
-        internal LocalPluginContext(IServiceProvider serviceProvider)
+        internal LocalPluginContext(IServiceProvider serviceProvider, Bus bus)
         {
-            if (serviceProvider == null)
-            {
-                throw new ArgumentNullException("serviceProvider");
-            }
+            serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            this.bus = bus ?? throw new ArgumentNullException(nameof(bus));
 
             // Obtain the execution context service from the service provider.
             this.PluginExecutionContext = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
@@ -58,14 +56,6 @@ namespace Xrm.Plugin.Base
             IOrganizationService orgServiceAsSystem = factory.CreateOrganizationService(null);
 
             OrgServiceWrapper = new OrganizationServiceWrapper(orgService, orgServiceAsSystem, new TransactionalService(orgService), new TransactionalService(orgServiceAsSystem));
-
-            #region XrmProjectTemplateQOS
-            //TODO: Refactor this
-            if (CommandBus == null)
-            {
-                CommandBus = new Bus(OrgServiceWrapper, TracingService);
-            }
-            #endregion
         }
 
         internal void Trace(string message)
@@ -87,6 +77,11 @@ namespace Xrm.Plugin.Base
                     this.PluginExecutionContext.CorrelationId,
                     this.PluginExecutionContext.InitiatingUserId);
             }
+        }
+
+        internal void Handle(ICommand command)
+        {
+            bus.Handle(command, new Models.Flow.FlowArguments(OrgServiceWrapper, TracingService, bus));
         }
     }
 }

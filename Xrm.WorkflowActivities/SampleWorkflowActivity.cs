@@ -23,7 +23,7 @@ namespace Xrm.WorkflowActivities
                 SomeId = contactRef.Id
             };
 
-            CommandBus.Handle(cmd);
+            Handle(cmd);
         }
     }
 }

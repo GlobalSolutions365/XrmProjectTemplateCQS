@@ -17,7 +17,7 @@ namespace Xrm.Domain.EventHandler
                 FirstName = "Test event"
             };
 
-            orgServiceWrapper.TransactionalOrgServiceAsSystem.Update(contactToUpdate);
+            OrgServiceWrapper.TransactionalOrgServiceAsSystem.Update(contactToUpdate);
 
             return new Events.TestTransactionalEvent2 { TargetAccount = @event .TargetAccount };
         }

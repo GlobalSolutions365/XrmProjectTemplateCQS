@@ -9,12 +9,12 @@ namespace Xrm.WorkflowActivities.Base
 {
     public abstract class BaseActivity : CodeActivity
     {
+        private Bus bus = new Bus();
+
         public CodeActivityContext CodeActivityContext { get; private set; }
         public ITracingService TracingService { get; private set; }
         public IWorkflowContext WorkflowContext { get; private set; }
         public OrganizationServiceWrapper OrgServiceWrapper { get; set; }
-        public ICommandBus CommandBus { get; private set; }
-
 
         protected override void Execute(CodeActivityContext executionContext)
         {
@@ -25,12 +25,16 @@ namespace Xrm.WorkflowActivities.Base
             WorkflowContext = executionContext.GetExtension<IWorkflowContext>() as IWorkflowContext;
             IOrganizationService orgService = factory.CreateOrganizationService(WorkflowContext.UserId) as IOrganizationService;
             IOrganizationService orgServiceAsSystem = factory.CreateOrganizationService(null) as IOrganizationService;
-            OrgServiceWrapper = new OrganizationServiceWrapper(orgService, orgServiceAsSystem, new TransactionalService(orgService), new TransactionalService(orgServiceAsSystem));
-            CommandBus = new Bus(OrgServiceWrapper, TracingService);
+            OrgServiceWrapper = new OrganizationServiceWrapper(orgService, orgServiceAsSystem, new TransactionalService(orgService), new TransactionalService(orgServiceAsSystem));       
 
             InternalExecute();
         }
 
         protected virtual void InternalExecute() { }
+
+        protected void Handle(ICommand command)
+        {
+            bus.Handle(command, new Models.Flow.FlowArguments(OrgServiceWrapper, TracingService, bus));
+        }
     }
 }

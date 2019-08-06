@@ -19,7 +19,7 @@ namespace Xrm.Plugin.Account
             {
                 TargetAccount = targetAccount              
             };
-            localContext.CommandBus.Handle(testTransactionalCommand);
+            localContext.Handle(testTransactionalCommand);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Xrm.Domain.CommandHandlers
                 Id = command.FromContact.ParentCustomerId.Id,
                 Name = $"I have {nrOfContacts} contacts"
             };
-            orgServiceWrapper.OrgServiceAsSystem.Update(account);
+            OrgServiceWrapper.OrgServiceAsSystem.Update(account);
 
             return new AccountNrOfContactsSetEvent { TargetContact = command.FromContact };
         }

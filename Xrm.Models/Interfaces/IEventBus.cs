@@ -1,7 +1,9 @@
-﻿namespace Xrm.Models.Interfaces
+﻿using Xrm.Models.Flow;
+
+namespace Xrm.Models.Interfaces
 {
     public interface IEventBus
     {
-        void NotifyListenersAbout(IEvent @event);
+        void NotifyListenersAbout(IEvent @event, FlowArguments flowArguments);
     }
 }

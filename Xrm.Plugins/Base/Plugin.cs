@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
+using Xrm.Infrastructure;
+using Xrm.Models.Interfaces;
 using ExtendedStepConfig = System.Tuple<int, int, string, int, string, string>;
 using ImageTuple = System.Tuple<string, string, int, string>;
 // StepConfig           : className, ExecutionStage, EventOperation, LogicalName
@@ -54,6 +56,10 @@ namespace Xrm.Plugin.Base
             this.ChildClassName = childClassName.ToString();
         }
 
+        #region Xrm Project Template CQS
+        private Bus bus = new Bus();
+        #endregion
+
 
         /// <summary>
         /// Executes the plug-in.
@@ -74,7 +80,7 @@ namespace Xrm.Plugin.Base
             }
 
             // Construct the Local plug-in context.
-            LocalPluginContext localcontext = new LocalPluginContext(serviceProvider);
+            LocalPluginContext localcontext = new LocalPluginContext(serviceProvider, bus);
 
             localcontext.Trace(string.Format(CultureInfo.InvariantCulture, "Entered {0}.Execute()", this.ChildClassName));
 
