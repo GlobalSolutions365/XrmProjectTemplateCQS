@@ -64,7 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandHandler.cs" />
+    <Compile Include="Base\CommandHandler.cs" />
     <Compile Include="CommandHandlers\InfiniteLoopCommandHandler.cs" />
     <Compile Include="CommandHandlers\SetAccountNrOfContactsCommandHandler.cs" />
     <Compile Include="CommandHandlers\TestCommandHandler.cs" />
@@ -75,8 +75,8 @@
     <Compile Include="Commands\TestCommand.cs" />
     <Compile Include="Commands\TestTransactionalCommand.cs" />
     <Compile Include="Commands\UpdateAccountNameCommand.cs" />
-    <Compile Include="CrmQuery.cs" />
-    <Compile Include="EventHandler.cs" />
+    <Compile Include="Base\CrmQuery.cs" />
+    <Compile Include="Base\EventHandler.cs" />
     <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler2.cs" />
     <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler1.cs" />
     <Compile Include="EventHandler\InfiniteLoopEvent2Handler.cs" />
@@ -94,9 +94,9 @@
     <Compile Include="Events\TestEvent.cs" />
     <Compile Include="Events\TestTransactionalEvent1.cs" />
     <Compile Include="Events\TestTransactionalEvent2.cs" />
-    <Compile Include="VoidEvent.cs" />
+    <Compile Include="Base\VoidEvent.cs" />
     <Compile Include="Events\TestCommandExecutedEvent.cs" />
-    <Compile Include="Locator.cs" />
+    <Compile Include="Base\Locator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AccountQueries.cs" />
   </ItemGroup>
