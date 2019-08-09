@@ -3,6 +3,7 @@
 <!-- Start Document Outline -->
 
 * [XRM Project Template CQS](#xrm-project-template-cqs)
+	* [Demo video](#demo-video)
 	* [Purpose](#purpose)
 	* [Commands, events and queries](#commands-events-and-queries)
 	* [How does it work?](#how-does-it-work)
@@ -35,6 +36,10 @@
 			* [ILMerge](#ilmerge)
 
 <!-- End Document Outline -->
+
+## Demo video
+
+<a href="https://www.youtube.com/watch?v=ETOSmzfTHEQ" target="_blank">XRM Project Template CQS - Demo</a>
 
 ## Purpose
 
