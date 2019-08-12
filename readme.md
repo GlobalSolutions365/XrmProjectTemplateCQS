@@ -39,7 +39,7 @@
 
 ## Demo video
 
-<a href="https://www.youtube.com/watch?v=ETOSmzfTHEQ" target="_blank">XRM Project Template CQS - Demo</a>
+<a href="https://youtu.be/vRiZCrzf2zg" target="_blank">XRM Project Template CQS - Demo</a>
 
 ## Purpose
 
