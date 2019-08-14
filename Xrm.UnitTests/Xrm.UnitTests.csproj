@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseCrmTest.cs" />
+    <Compile Include="Domain\Branching\BranchingThroughInheritanceTests.cs" />
     <Compile Include="Domain\CommandHandlers\SetAccountNrOfContactsCommandHandlerTests.cs" />
     <Compile Include="Fakes\FakeTracingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

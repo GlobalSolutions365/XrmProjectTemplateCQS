@@ -65,11 +65,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\CommandHandler.cs" />
+    <Compile Include="CommandHandlers\BrachedCommand1Handler.cs" />
     <Compile Include="CommandHandlers\InfiniteLoopCommandHandler.cs" />
     <Compile Include="CommandHandlers\SetAccountNrOfContactsCommandHandler.cs" />
     <Compile Include="CommandHandlers\TestCommandHandler.cs" />
     <Compile Include="CommandHandlers\TestTransactionalCommandHandler.cs" />
     <Compile Include="CommandHandlers\UpdateAccountNameCommandHandler.cs" />
+    <Compile Include="Commands\BranchedCommand1.cs" />
+    <Compile Include="Commands\BranchedCommand2.cs" />
     <Compile Include="Commands\InfiniteLoopCommand.cs" />
     <Compile Include="Commands\SetAccountNrOfContactsCommand.cs" />
     <Compile Include="Commands\TestCommand.cs" />
@@ -79,6 +82,8 @@
     <Compile Include="Base\EventHandler.cs" />
     <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler2.cs" />
     <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler1.cs" />
+    <Compile Include="EventHandler\BranchedEvent2Handler.cs" />
+    <Compile Include="EventHandler\BranchedEvent1Handler.cs" />
     <Compile Include="EventHandler\InfiniteLoopEvent2Handler.cs" />
     <Compile Include="EventHandler\InifiniteLoopEvent1Handler.cs" />
     <Compile Include="EventHandler\TestCommandExecutedEventHandler.cs" />
@@ -87,6 +92,9 @@
     <Compile Include="EventHandler\TestTransactionalEvent2Handler.cs" />
     <Compile Include="EventHandler\TestTransactionalEvent1Handler.cs" />
     <Compile Include="Events\AccountNrOfContactsSetEvent.cs" />
+    <Compile Include="Events\BranchedCommand1HandledEvent.cs" />
+    <Compile Include="Events\BranchedEvent1.cs" />
+    <Compile Include="Events\BranchedEvent2.cs" />
     <Compile Include="Events\InfiniteLoopEvent1.cs" />
     <Compile Include="Events\InfiniteLoopEvent2.cs" />
     <Compile Include="Events\LastNameChangedEvent.cs" />
