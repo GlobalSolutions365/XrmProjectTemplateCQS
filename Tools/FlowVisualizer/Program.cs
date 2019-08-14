@@ -23,7 +23,7 @@ namespace FlowVisualizer
             {
                 (Type parameterType, Type resultType) = GetFlowTypes(commandHandler);
 
-                WriteTypeToConsole(commandHandler, parameterType, resultType, 0);
+                WriteTypeToConsole(commandHandler, parameterType, resultType, 0, parameterType);
 
                 VisualizeEvents(domain, resultType, 1, new List<Type>());
 
@@ -39,7 +39,7 @@ namespace FlowVisualizer
             {
                 (Type parameterType, Type resultType) = GetFlowTypes(eventHandler);                
 
-                WriteTypeToConsole(eventHandler, parameterType, resultType, level);
+                WriteTypeToConsole(eventHandler, parameterType, resultType, level, eventType);
 
                 if (previousEventParameters.Contains(resultType))
                 {
@@ -74,7 +74,8 @@ namespace FlowVisualizer
             }
             else
             {
-                return types.Where(t => t.BaseType.GetGenericArguments()[0] == parameterType).ToArray();
+                return types.Where(t => t.BaseType.GetGenericArguments()[0] == parameterType
+                                        || t.BaseType.GetGenericArguments()[0].BaseType == parameterType).ToArray();
             }
         }
 
@@ -85,16 +86,31 @@ namespace FlowVisualizer
             return (genericArguments[0], genericArguments[1]);
         }
 
-        private static void WriteTypeToConsole(Type type, Type parameter, Type result, int level)
+        private static void WriteTypeToConsole(Type type, Type parameter, Type result, int level, Type sourceType)
         {
             Console.Write(new string(' ', level * 4));
 
-            using(new Color(ConsoleColor.Cyan))
+            if (type.BaseType.GetGenericArguments()[0] != sourceType)
+            {
+                if(!inheritedAlternativeHandlers.Contains(sourceType))
+                {
+                    inheritedAlternativeHandlers.Add(sourceType);
+                }
+
+                using (new Color(ConsoleColor.DarkYellow))
+                {
+                    Console.Write($"(OR_{inheritedAlternativeHandlers.IndexOf(sourceType)}) ");
+                }
+            }
+
+            using (new Color(ConsoleColor.Cyan))
             {
                 Console.Write(type.Name);
             }
 
             Console.WriteLine($": { parameter.Name} -> {result.Name}");
         }
+        private static List<Type> inheritedAlternativeHandlers = new List<Type>();
+
     }
 }
