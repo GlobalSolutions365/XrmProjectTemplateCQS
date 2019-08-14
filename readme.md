@@ -530,6 +530,73 @@ In the standard scenario you'd be using the ```orgServiceWrapper.OrgService``` a
 
 > Each flow instance has it's own transaction queues. They are not shared.
 
+## Event Branching
+
+In scenarios where the event you need to generate from a command or event handler, the following approach is recommended. 
+
+1. Create an abstract base class implementing the IEvent interface and set it as the result event of the command or event handler.
+2. Create events inheriting from the base class.
+3. Create a dedicated event handler for each of those events.
+
+Example:
+
+Simple command with a field to dictate which event should be executed afterwards:
+```csharp
+public class BranchedCommand1 : ICommand
+{
+    public bool ExecuteBranch1 { get; set; }
+}
+```
+
+The base abstract event:
+```csharp
+public abstract class BranchedCommand1HandledEvent : IEvent
+{
+
+}
+```
+
+The event for branch 1:
+```csharp
+public class BranchedEvent1 : BranchedCommand1HandledEvent
+{
+
+}
+```
+
+The event for branch 2:
+```csharp
+public class BranchedEvent2 : BranchedCommand1HandledEvent
+{
+
+}
+```
+
+The command handler:
+```csharp
+public class BrachedCommand1Handler : CommandHandler<BranchedCommand1, BranchedCommand1HandledEvent>
+{
+    public BrachedCommand1Handler(FlowArguments flowArgs) : base(flowArgs)
+    {
+    }
+
+    public override BranchedCommand1HandledEvent Execute(BranchedCommand1 command)
+    {
+        TracingService.Trace(nameof(BrachedCommand1Handler));
+
+        if (command.ExecuteBranch1)
+        {
+            return new BranchedEvent1();
+        }
+        else
+        {
+            return new BranchedEvent2();
+        }
+    }
+}
+```
+
+This example shows how you can return different types of events from a single command handler.
 
 ## Tools
 
