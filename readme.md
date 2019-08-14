@@ -27,6 +27,7 @@
 		* [Xrm.WorkflowActivities](#xrmworkflowactivities)
 	* [Custom dependencies](#custom-dependencies)
 	* [Handling transactions](#handling-transactions)
+	* [Event Branching](#event-branching)
 	* [Tools](#tools)
 		* [Built-in](#built-in)
 		* [External](#external)
