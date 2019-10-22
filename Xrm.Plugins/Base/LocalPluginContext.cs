@@ -81,7 +81,7 @@ namespace Xrm.Plugin.Base
 
         internal void Handle(ICommand command)
         {
-            bus.Handle(command, new Models.Flow.FlowArguments(OrgServiceWrapper, TracingService, bus));
+            bus.Handle(command, new Models.Flow.FlowArguments(OrgServiceWrapper, TracingService, bus, bus));
         }
     }
 }

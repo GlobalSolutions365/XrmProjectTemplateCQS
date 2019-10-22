@@ -6,6 +6,7 @@
 	* [Demo video](#demo-video)
 	* [Purpose](#purpose)
 	* [Commands, events and queries](#commands-events-and-queries)
+	* [Triggering parallel flows](#triggering-parallel-flows)
 	* [How does it work?](#how-does-it-work)
 		* [The flow](#the-flow)
 		* [Command](#command)
@@ -42,6 +43,11 @@
 
 <a href="https://youtu.be/vRiZCrzf2zg" target="_blank">XRM Project Template CQS - Demo</a>
 
+## Change log
+
+* **2019-08-14**: Initial release.
+* **2019-10-22**: Added option to trigger a parallel flow from inside command or event handlers. See [Triggering parallel flows](#triggering-parallel-flows).
+
 ## Purpose
 
 The main purpose of this repository is to provide a clean solution template for building XRM (Dynamics CRM / Dynamics 365 CE) projects. Inspired by the <a href="https://en.wikipedia.org/wiki/Command–query_separation" target="_blank">CQS (Command-Query-Seperation)</a> principle and the <a href="https://en.wikipedia.org/wiki/SOLID" target="_blank">SOLID</a> principles. The aim is to build the solution with small, testable, maintainable and non-conflicting (in sense of source control) blocks. At the same time the amount of non business logic related code should be minimized if not avoided completely.
@@ -60,6 +66,12 @@ Commands and events depend on the queries (since often the decision what to do d
 ***Queries*** depend only on CRM. Commands and events don't do any query data directly, instead they do it through the queries. ***Commands***, when done, can raise events. ***Events***, when done, can raise events. The image below depicts their interactions.
 
 ![Components](Docs/Images/Components.svg)
+
+## Triggering parallel flows
+
+In some scenarios it might make sense to trigger another flow from within the original one. This applies mostly to situations where the triggered flow is not logically connected to the original one and has reasons to exist by itself. If it doesn't it's recommended to use the standard command + events approach.
+
+Another flow can be triggered from withing a command handler or event handler by calling the ```TriggerCommand``` method. Although we use the word *parallel* here this is only on a logical level. Technically the new flow is executed synchronously in the place where it is invoked. The CRM / D365 CE sandbox host doesn't allow parallel execution. 
 
 ## How does it work?
 

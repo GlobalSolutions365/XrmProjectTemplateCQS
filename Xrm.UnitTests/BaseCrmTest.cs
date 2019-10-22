@@ -24,7 +24,7 @@ namespace Xrm.UnitTests
 
         protected IEventBus EventBus => new Bus();
 
-        protected FlowArguments FlowArgs => new FlowArguments(OrgServiceWrapper, FakeTracing, EventBus);
+        protected FlowArguments FlowArgs => new FlowArguments(OrgServiceWrapper, FakeTracing, EventBus, CmdBus);
 
     }
 }
