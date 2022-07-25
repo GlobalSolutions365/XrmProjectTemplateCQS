@@ -85,17 +85,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xrm.Domain\Xrm.Domain.csproj">
+    <ProjectReference Include="..\Modules\DateProvider\DateProvider.csproj">
+      <Project>{1B6F3C61-DBFB-44F4-B28C-DEAFACC4F0EF}</Project>
+      <Name>DateProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xrm.Application\Xrm.Application.csproj">
       <Project>{87ea246e-8756-4bad-bae4-bdafa92712c3}</Project>
-      <Name>Xrm.Domain</Name>
+      <Name>Xrm.Application</Name>
     </ProjectReference>
     <ProjectReference Include="..\Xrm.Infrastructure\Xrm.Infrastructure.csproj">
       <Project>{29f85a38-6992-48b3-9cb6-3e166f1bed64}</Project>
       <Name>Xrm.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Xrm.Models\Xrm.Models.csproj">
+    <ProjectReference Include="..\Xrm.Domain\Xrm.Domain.csproj">
       <Project>{0c9b7f6f-9e1c-49d0-b802-16143ab05529}</Project>
-      <Name>Xrm.Models</Name>
+      <Name>Xrm.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

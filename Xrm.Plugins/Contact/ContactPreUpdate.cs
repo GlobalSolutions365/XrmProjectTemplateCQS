@@ -1,6 +1,6 @@
-﻿using Xrm.Domain.Commands;
+﻿using Xrm.Application.Commands;
 using Xrm.Plugin.Base;
-using Ctx = Xrm.Models.Crm;
+using Ctx = Xrm.Domain.Crm;
 
 namespace Xrm.Plugin.Contact
 {

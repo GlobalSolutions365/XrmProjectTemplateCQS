@@ -1,0 +1,84 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>164860d5-5a72-4651-91e9-1afc380875eb</UserSecretsId>
+    <AssemblyName>WebResources</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="extensions\common\**" />
+    <Compile Remove="forms\case\**" />
+    <Compile Remove="forms\incident\**" />
+    <Content Remove="extensions\common\**" />
+    <Content Remove="forms\case\**" />
+    <Content Remove="forms\incident\**" />
+    <EmbeddedResource Remove="extensions\common\**" />
+    <EmbeddedResource Remove="forms\case\**" />
+    <EmbeddedResource Remove="forms\incident\**" />
+    <None Remove="extensions\common\**" />
+    <None Remove="forms\case\**" />
+    <None Remove="forms\incident\**" />
+    <TypeScriptCompile Remove="extensions\common\**" />
+    <TypeScriptCompile Remove="forms\case\**" />
+    <TypeScriptCompile Remove="forms\incident\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="extensions\contactSearch\js\models.ts" />
+  </ItemGroup>
+
+  <ItemGroup>    
+    <TypeScriptCompile Remove="libs\ext\alert.ts" />
+    <TypeScriptCompile Remove="libs\formHelper.ts" />
+    <TypeScriptCompile Remove="libs\generalHelper.ts" />
+    <TypeScriptCompile Remove="libs\queryHelper.ts" />
+    <TypeScriptCompile Remove="libs\urlHelper.ts" />
+    <TypeScriptCompile Remove="Typings\domain.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.0.0" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.8.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>    
+    <Folder Include="extensions\put_html_resources_here\" />    
+    <Folder Include="libs\ext\select2\" />
+    <Folder Include="img\" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile></TypeScriptOutFile>
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="REM &quot;$(SolutionDir)Tools\WebResourceSync\bin\Debug\WebResourceSync.exe&quot; webResourceMappings.json" />
+  </Target>
+
+</Project>

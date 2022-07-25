@@ -2,8 +2,9 @@
 using Microsoft.Xrm.Sdk.Workflow;
 using System.Activities;
 using Xrm.Infrastructure;
-using Xrm.Models.Crm;
-using Xrm.Models.Interfaces;
+using Xrm.Domain.Crm;
+using Xrm.Domain.Interfaces;
+using DateProvider;
 
 namespace Xrm.WorkflowActivities.Base
 {
@@ -34,7 +35,7 @@ namespace Xrm.WorkflowActivities.Base
 
         protected void Handle(ICommand command)
         {
-            bus.Handle(command, new Models.Flow.FlowArguments(OrgServiceWrapper, TracingService, bus, bus));
+            bus.Handle(command, new Domain.Flow.FlowArguments(OrgServiceWrapper, TracingService, bus, bus));
         }
     }
 }

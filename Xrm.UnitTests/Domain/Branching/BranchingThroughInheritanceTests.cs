@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xrm.Domain.CommandHandlers;
-using Xrm.Domain.Commands;
-using Xrm.Domain.EventHandler;
+using Xrm.Application.CommandHandlers;
+using Xrm.Application.Commands;
+using Xrm.Application.EventHandler;
 using Xrm.UnitTests.Fakes;
 
 namespace Xrm.UnitTests.Domain.Branching

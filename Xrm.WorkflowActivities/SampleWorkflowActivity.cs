@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using System.Activities;
-using Xrm.Domain.Commands;
-using Xrm.Models.Crm;
+using Xrm.Application.Commands;
+using Xrm.Domain.Crm;
 
 namespace Xrm.WorkflowActivities
 {

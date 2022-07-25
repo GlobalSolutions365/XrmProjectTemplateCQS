@@ -3,8 +3,8 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Linq;
-using Xrm.Domain.Commands;
-using Xrm.Models.Crm;
+using Xrm.Application.Commands;
+using Xrm.Domain.Crm;
 
 namespace Xrm.UnitTests.Domain.CommandHandlers
 {

@@ -1,10 +1,10 @@
 ﻿using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xrm.Domain.Commands;
-using Xrm.Domain.Events;
+using Xrm.Application.Commands;
+using Xrm.Application.Events;
 using Xrm.Infrastructure;
-using Xrm.Models.Crm;
-using Xrm.Models.Interfaces;
+using Xrm.Domain.Crm;
+using Xrm.Domain.Interfaces;
 
 namespace Xrm.UnitTests.Resolver
 {

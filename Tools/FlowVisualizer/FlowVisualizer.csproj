@@ -55,13 +55,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Xrm.Domain\Xrm.Domain.csproj">
+    <ProjectReference Include="..\..\Xrm.Application\Xrm.Application.csproj">
       <Project>{87ea246e-8756-4bad-bae4-bdafa92712c3}</Project>
-      <Name>Xrm.Domain</Name>
+      <Name>Xrm.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Xrm.Models\Xrm.Models.csproj">
+    <ProjectReference Include="..\..\Xrm.Domain\Xrm.Domain.csproj">
       <Project>{0C9B7F6F-9E1C-49D0-B802-16143AB05529}</Project>
-      <Name>Xrm.Models</Name>
+      <Name>Xrm.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

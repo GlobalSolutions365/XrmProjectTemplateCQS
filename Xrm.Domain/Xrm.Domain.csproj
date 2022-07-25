@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{87EA246E-8756-4BAD-BAE4-BDAFA92712C3}</ProjectGuid>
+    <ProjectGuid>{0C9B7F6F-9E1C-49D0-B802-16143AB05529}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xrm.Domain</RootNamespace>
@@ -34,7 +34,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Xrm.Domain.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Xrm.Models.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -64,64 +64,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\CommandHandler.cs" />
-    <Compile Include="CommandHandlers\BrachedCommand1Handler.cs" />
-    <Compile Include="CommandHandlers\InfiniteLoopCommandHandler.cs" />
-    <Compile Include="CommandHandlers\CommandTriggeringCommandHandler.cs" />
-    <Compile Include="CommandHandlers\SetAccountNrOfContactsCommandHandler.cs" />
-    <Compile Include="CommandHandlers\TestCommandHandler.cs" />
-    <Compile Include="CommandHandlers\TestTransactionalCommandHandler.cs" />
-    <Compile Include="CommandHandlers\UpdateAccountNameCommandHandler.cs" />
-    <Compile Include="Commands\BranchedCommand1.cs" />
-    <Compile Include="Commands\BranchedCommand2.cs" />
-    <Compile Include="Commands\InfiniteLoopCommand.cs" />
-    <Compile Include="Commands\CommandTriggeringCommand.cs" />
-    <Compile Include="Commands\SetAccountNrOfContactsCommand.cs" />
-    <Compile Include="Commands\TestCommand.cs" />
-    <Compile Include="Commands\TestTransactionalCommand.cs" />
-    <Compile Include="Commands\UpdateAccountNameCommand.cs" />
-    <Compile Include="Base\CrmQuery.cs" />
-    <Compile Include="Base\EventHandler.cs" />
-    <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler2.cs" />
-    <Compile Include="EventHandler\AccountNrOfContactsSetEventHandler1.cs" />
-    <Compile Include="EventHandler\BranchedEvent2Handler.cs" />
-    <Compile Include="EventHandler\BranchedEvent1Handler.cs" />
-    <Compile Include="EventHandler\EventTriggeringCommandHandler.cs" />
-    <Compile Include="EventHandler\InfiniteLoopEvent2Handler.cs" />
-    <Compile Include="EventHandler\InifiniteLoopEvent1Handler.cs" />
-    <Compile Include="EventHandler\TestCommandExecutedEventHandler.cs" />
-    <Compile Include="EventHandler\TestEventHandler2.cs" />
-    <Compile Include="EventHandler\TestEventHandler1.cs" />
-    <Compile Include="EventHandler\TestTransactionalEvent2Handler.cs" />
-    <Compile Include="EventHandler\TestTransactionalEvent1Handler.cs" />
-    <Compile Include="Events\AccountNrOfContactsSetEvent.cs" />
-    <Compile Include="Events\BranchedCommand1HandledEvent.cs" />
-    <Compile Include="Events\BranchedEvent1.cs" />
-    <Compile Include="Events\BranchedEvent2.cs" />
-    <Compile Include="Events\EventTriggeringCommand.cs" />
-    <Compile Include="Events\InfiniteLoopEvent1.cs" />
-    <Compile Include="Events\InfiniteLoopEvent2.cs" />
-    <Compile Include="Events\LastNameChangedEvent.cs" />
-    <Compile Include="EventHandler\LastNameChangedEventHandler.cs" />
-    <Compile Include="Events\TestEvent.cs" />
-    <Compile Include="Events\TestTransactionalEvent1.cs" />
-    <Compile Include="Events\TestTransactionalEvent2.cs" />
-    <Compile Include="Base\VoidEvent.cs" />
-    <Compile Include="Events\TestCommandExecutedEvent.cs" />
-    <Compile Include="Base\Locator.cs" />
+    <Compile Include="Attributes\InUserContextAttribute.cs" />
+    <Compile Include="Configuration\Settings.cs" />
+    <Compile Include="Crm\OptionSetValueCollection.cs" />
+    <Compile Include="Crm\OrganizationServiceWrapper.cs" />
+    <Compile Include="Crm\XrmContext.cs" />
+    <Compile Include="Crm\XrmExtensions.cs" />
+    <Compile Include="DTO\BackgroundJobInfo.cs" />
+    <Compile Include="DTO\ConfigurationSetting.cs" />
+    <Compile Include="DTO\HttpResponseBodyAndCode.cs" />
+    <Compile Include="DTO\TimeZoneNames.cs" />
+    <Compile Include="Flow\FlowArguments.cs" />
+    <Compile Include="Interfaces\ICommand.cs" />
+    <Compile Include="Interfaces\ICommandBus.cs" />
+    <Compile Include="Interfaces\IEvent.cs" />
+    <Compile Include="Interfaces\IEventBus.cs" />
+    <Compile Include="Interfaces\IHandleCommand.cs" />
+    <Compile Include="Interfaces\IHandleEvent.cs" />
+    <Compile Include="Interfaces\IOrganizationServiceWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\AccountQueries.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Xrm.Models\Xrm.Models.csproj">
-      <Project>{0C9B7F6F-9E1C-49D0-B802-16143AB05529}</Project>
-      <Name>Xrm.Models</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Xrm.Domain.snk" />
+    <None Include="Xrm.Models.snk" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

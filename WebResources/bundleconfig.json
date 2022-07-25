@@ -1,0 +1,11 @@
+[  
+  {
+    "outputFileName": "forms/account/main.bundle.js",
+    "inputFiles": [
+      "libs/queryhelper.js",
+      "libs/formHelper.js",
+      "libs/urlHelper.js",
+      "forms/account/accountMain.js"
+    ]
+  }
+]

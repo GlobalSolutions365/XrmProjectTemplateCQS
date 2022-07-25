@@ -1,14 +1,16 @@
 ﻿using Autofac;
 using Autofac.Core;
+using DateProvider;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Xrm.Domain;
-using Xrm.Models.Attributes;
-using Xrm.Models.Flow;
-using Xrm.Models.Interfaces;
+using Xrm.Application;
+using Xrm.Application.Interfaces;
+using Xrm.Domain.Attributes;
+using Xrm.Domain.Flow;
+using Xrm.Domain.Interfaces;
 
 namespace Xrm.Infrastructure
 {
@@ -18,8 +20,10 @@ namespace Xrm.Infrastructure
 
         private readonly IContainer container = null;
 
-        public Bus()
-        {           
+        public Bus(IDateProvider dateProvider = null, IConfigurationReader configurationReader = null, IHttpRequestExecutor httpRequestExector = null, IFileSystem fileSystem = null)
+        {
+            dateProvider = dateProvider ?? new SystemDateProvider();
+
             var builder = new ContainerBuilder();
 
             Assembly domain = typeof(Locator).Assembly;
@@ -30,6 +34,12 @@ namespace Xrm.Infrastructure
             builder.RegisterAssemblyTypes(domain).AsClosedTypesOf(typeof(CrmQuery<>));
 
             /// Add custom dependencies below
+            builder.RegisterInstance(dateProvider);
+            builder.RegisterInstance<IJsonHelper>(new JsonHelper.JsonHelper());
+            builder.RegisterInstance<IXmlHelper>(new XmlHelper.XmlHelper());
+            builder.RegisterInstance(configurationReader);
+            builder.RegisterInstance(httpRequestExector ?? new PhysicalHttpRequestExecutor.HttpRequestExecutor());
+            builder.RegisterInstance(fileSystem ?? new PhysicalFileSystem.FileSystem());
             /// --- End of custom added dependencties
 
             container = builder.Build();

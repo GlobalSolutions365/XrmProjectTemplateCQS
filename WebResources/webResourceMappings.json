@@ -1,0 +1,18 @@
+[  
+  {
+    "source": "forms/account/main.bundle.js",
+    "target": "new_/forms/account/main.js"
+  },
+  {
+    "source": "img/dialog_16.png",
+    "target": "new_/img/dialog_16.png"
+  },
+  {
+    "source": "img/dialog_32.png",
+    "target": "new_/img/dialog_32.png"
+  },
+  {
+    "source": "img/dialog.svg",
+    "target": "new_/img/dialog.svg"
+  }
+]

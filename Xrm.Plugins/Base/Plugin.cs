@@ -6,13 +6,14 @@ using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 using Xrm.Infrastructure;
-using Xrm.Models.Interfaces;
+using Xrm.Domain.Interfaces;
 using ExtendedStepConfig = System.Tuple<int, int, string, int, string, string>;
 using ImageTuple = System.Tuple<string, string, int, string>;
 // StepConfig           : className, ExecutionStage, EventOperation, LogicalName
 // ExtendedStepConfig   : Deployment, ExecutionMode, Name, ExecutionOrder, FilteredAttributes, UserContext
 // ImageTuple           : Name, EntityAlias, ImageType, Attributes
 using StepConfig = System.Tuple<string, int, string, string>;
+using DateProvider;
 
 namespace Xrm.Plugin.Base
 {

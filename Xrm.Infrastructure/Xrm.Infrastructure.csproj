@@ -75,13 +75,33 @@
     <Compile Include="TransactionalService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xrm.Domain\Xrm.Domain.csproj">
-      <Project>{87ea246e-8756-4bad-bae4-bdafa92712c3}</Project>
-      <Name>Xrm.Domain</Name>
+    <ProjectReference Include="..\Modules\DateProvider\DateProvider.csproj">
+      <Project>{1b6f3c61-dbfb-44f4-b28c-deafacc4f0ef}</Project>
+      <Name>DateProvider</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Xrm.Models\Xrm.Models.csproj">
+    <ProjectReference Include="..\Modules\JsonHelper\JsonHelper.csproj">
+      <Project>{bcfaad7b-8d26-49a5-9d25-46b000efb838}</Project>
+      <Name>JsonHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Modules\PhysicalFileSystem\PhysicalFileSystem.csproj">
+      <Project>{2c139f35-5c0a-44c7-9dad-7ff2087ffdaa}</Project>
+      <Name>PhysicalFileSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Modules\PhysicalHttpRequestExecutor\PhysicalHttpRequestExecutor.csproj">
+      <Project>{d719bbe8-01dd-4f6f-81a7-f294accff844}</Project>
+      <Name>PhysicalHttpRequestExecutor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Modules\XmlHelper\XmlHelper.csproj">
+      <Project>{8625ca79-6318-4324-8dac-30dfcb09159c}</Project>
+      <Name>XmlHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xrm.Application\Xrm.Application.csproj">
+      <Project>{87ea246e-8756-4bad-bae4-bdafa92712c3}</Project>
+      <Name>Xrm.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xrm.Domain\Xrm.Domain.csproj">
       <Project>{0C9B7F6F-9E1C-49D0-B802-16143AB05529}</Project>
-      <Name>Xrm.Models</Name>
+      <Name>Xrm.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

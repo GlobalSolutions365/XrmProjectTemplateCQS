@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xrm.Sdk;
 using System;
 using Xrm.Infrastructure;
-using Xrm.Models.Crm;
-using Xrm.Models.Interfaces;
+using Xrm.Domain.Crm;
+using Xrm.Domain.Interfaces;
 
 namespace Xrm.Plugin.Base
 {
@@ -81,7 +81,7 @@ namespace Xrm.Plugin.Base
 
         internal void Handle(ICommand command)
         {
-            bus.Handle(command, new Models.Flow.FlowArguments(OrgServiceWrapper, TracingService, bus, bus));
+            bus.Handle(command, new Domain.Flow.FlowArguments(OrgServiceWrapper, TracingService, bus, bus));
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Xrm.Domain;
+using Xrm.Application;
 
 namespace FlowVisualizer
 {

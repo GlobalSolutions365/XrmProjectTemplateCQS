@@ -3,6 +3,8 @@ Sets up all the necessary variables and functions to be used for the other scrip
 *)
 #r @"bin\Microsoft.Xrm.Sdk.dll"
 #r @"bin\Microsoft.Crm.Sdk.Proxy.dll"
+#r @"bin\Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
+#r @"bin\Microsoft.Xrm.Tooling.Connector.dll"
 #r @"bin\Delegate.Daxif.dll"
 open System
 open Microsoft.Xrm.Sdk.Client
@@ -11,40 +13,23 @@ open DG.Daxif.Common.Utility
   
 // Prompts the developer for a username and password the first time a script is run.
 // It then stores these credentials in a local .daxif-file.
-let creds = Credentials.FromKey("Crm9")
-
+let creds = Credentials.FromKey("UserCreds_DSS")
 
 // If you want to store login credentials directly in code, instead of in a local file, 
 // replace the above line with the following
-//let creds = Credentials.Create("user", "password", "domain")
+//let creds = Credentials.Create("usr", "pwd")
 
 module Env =
   let dev = 
     Environment.Create(
       name = "Development",
-      url = "http://uds-hv-eval/crm9/XRMServices/2011/Organization.svc",
-      ap = AuthenticationProviderType.OnlineFederation,
-      creds = creds,
-      args = fsi.CommandLineArgs
-    )
-  
-  let test = 
-    Environment.Create(
-      name = "Test",
-      url = "https://mytest.crm4.dynamics.com/XRMServices/2011/Organization.svc",
-      ap = AuthenticationProviderType.OnlineFederation,
-      creds = creds,
+      url = "https://myorg.crm4.dynamics.com/XRMServices/2011/Organization.svc",
+      method = ConnectionType.ClientSecret,      
+      mfaAppId = "{{APP_ID}}",
+      mfaClientSecret = "{{CLIENT_SECRET}}",
       args = fsi.CommandLineArgs
     )
 
-  let prod = 
-    Environment.Create(
-      name = "Production",
-      url = "https://myprod.crm4.dynamics.com/XRMServices/2011/Organization.svc",
-      ap = AuthenticationProviderType.OnlineFederation,
-      creds = creds,
-      args = fsi.CommandLineArgs
-    )
 
 
 (** 
@@ -52,13 +37,13 @@ CRM Solution Setup
 ------------------
 *)
 module SolutionInfo =
-  let name = @"XrmSolution"
-  let displayName = @"XrmSolution"
+  let name = @"{{SOLUTION_NAME}}"
+  let displayName = @"{{SOLUTION_DISPLAY_NAME}}"
 
 module PublisherInfo =
-  let prefix = @"test"
-  let name = @"TestPublisher"
-  let displayName = @"Test Publisher"
+  let prefix = @"new {{UPDATE}}"
+  let name = @"MyCompany {{UPDATE}}"
+  let displayName = @"My Company {{UPDATE}}"
 
 
 (** 
